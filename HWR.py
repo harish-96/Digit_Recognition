@@ -5,21 +5,32 @@ import random
 
 class HWR(object):
 
-	def __init__(self, num_neurons_list):
-		"""  -------------  """
+    def __init__(self, num_neurons_list):
+   	"""  -------------  """
         self.num_layers = len(num_neurons_list)
         self.num_neurons_list = num_neurons_list
         self.biases = [np.random.randn(y, 1) for y in num_neurons_list[1:]]
         self.weights = [np.random.randn(y, x)
                         for x, y in zip(num_neurons_list[:-1], num_neurons_list[1:])]
-	def SGD(self,train_data , n_sweeps , batch_size , learning_rate ):
-		n = len(train_data)
-		for in xrange(n_sweeps):
-			random.shuffle(train_data)
-			batches = [train_data[j:j+batch_size for j in xrange(0,n,batch_size)
-			for batch in batches :
-				self.update_batch(batch , learning_rate)
-	def update_batch(self,batch , learning_rate):
+    def train_using_SGD(self,train_data , n_sweeps , batch_size , learning_rate ):
+   	n = len(train_data)
+	for j in xrange(n_sweeps):
+		random.shuffle(train_data)
+		batches = [train_data[j:j+batch_size] for j in xrange(0,n,batch_size)]
+		for batch in batches :
+			self.update_batch(batch , learning_rate)
+    def update_batch(self,batch , learning_rate):
+        total_delta_b = [np.zeros(b.shape) for b in self.biases]
+        total_delta_w = [np.zeros(w.shape) for w in self.weights]
+        for x,y in batch:
+            delta_b , delta_w = self.backprop(x,y)
+            total_delta_b = total_delta_b + delta_b
+            total_delta_w = total_delta_w + delta_w
+        self.biases = self.biases-((learning_rate/len(batch))*total_delta_b)
+        self.weights = self.weights-((learning_rate/len(batch))*total_delta_w)
+        
+            
+            
 		
 
 	
