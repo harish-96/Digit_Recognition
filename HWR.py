@@ -60,13 +60,6 @@ class HWR(object):
     def cost_derivative(self, output_activations, y):
         """-------------------------"""
         return (output_activations-y)
- 
-            
-            
-		
-
-	
-
 
 def sigmoid_function(t):
     """-------------------"""
