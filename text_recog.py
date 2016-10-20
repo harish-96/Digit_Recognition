@@ -19,8 +19,11 @@ def unpack_dat(imgpath, labpath):
         magic_num, n_dim, n_rows, n_cols = struct.unpack(">iiii",
                                                          f.read(16))
         images = np.fromfile(f, dtype=np.uint8).reshape(len(labels), 784)
+
     images = [np.reshape(x, (784, 1)) for x in images]
-    labels = [np.array([y == i for i in range(10)])[np.newaxis].T for y in labels]
+    labels = [np.array([y == i for i in range(10)])[np.newaxis].T
+              for y in labels]
+
     return images, labels
 
 
@@ -28,6 +31,7 @@ def display_data(imgs, nrows=1, ncols=1, nx_pixels=28, ny_pixels=28):
     """Dispay the images given in X. 'nrows' and 'ncols' are
     the number of rows and columns in the displayed data"""
     fig, ax = plt.subplots(nrows=nrows, ncols=ncols, sharex=True, sharey=True,)
+
     if (nrows + ncols) == 2:
         ax.imshow(imgs[0].reshape(nx_pixels, ny_pixels),
                   cmap='Greys', interpolation="bicubic")
@@ -43,6 +47,7 @@ def display_data(imgs, nrows=1, ncols=1, nx_pixels=28, ny_pixels=28):
 def sigmoid(z):
     """Evaluates the sigmoid function at the given input
     Returns a numpy array"""
+
     z = np.asarray(z)
     return 1.0 / (1.0 + np.exp(-z))
 
@@ -50,62 +55,78 @@ def sigmoid(z):
 def sigmoid_derivative(z):
     """Evaluates the derivative of the sigmoid function at the given input
     Returns a numpy array"""
+
     return sigmoid(z) * (1 - sigmoid(z))
 
 
 class NN_hwr(object):
     """A template class for a neural network to recognise handwritten text
-    Initialise with a list with each element being the number of neurons in that layer
-    For example: neural_net = NN_hwr([400, 30, 10]) creates a neural network with 3 layers
-    and 400, 30 and 10 as their sizes"""
+    Initialise with a list with each element being the number of neurons in
+    that layer
+    For example: neural_net = NN_hwr([400, 30, 10]) creates a neural network
+    with 3 layers and 400, 30 and 10 as their sizes"""
 
     def __init__(self, num_neurons_list):
         """Input must be a list of numbers."""
+
         for i in num_neurons_list:
             if type(i) not in [type(2)]:
                 raise TypeError("Expected integer type")
+
         self.num_layers = len(num_neurons_list)
         self.num_neurons_list = num_neurons_list
         self.biases = [np.random.randn(y, 1) for y in num_neurons_list[1:]]
         self.weights = [np.random.randn(y, x)
-                        for x, y in zip(num_neurons_list[:-1], num_neurons_list[1:])]
+                        for x, y in zip(num_neurons_list[:-1],
+                        num_neurons_list[1:])]
 
     def forward_prop(self, x_train):
-        """Computes the activations and weighted inputs of the neurons in the network for the
-        given input data
-        Returns a tuple of lists containing the activations and weighted inputs"""
+        """Computes the activations and weighted inputs of the neurons in
+        the network for the given input data
+        Returns a tuple of lists containing activations and weighted inputs"""
+
         activations = []
         z = []
         activations.append(x_train)
+
         for i in range(self.num_layers - 1):
             z.append(np.dot(self.weights[i], activations[-1]) + self.biases[i])
             activations.append(sigmoid(z[-1]))
+
         return activations[1:], z
 
     def back_prop(self, training_example):
-        """Computes the partial derivatives of the cost function with respect to the weights
-        and biases of the network
-        training_example is a tuple with element one an np array and element 2 an array
-        of length 10 of zeros everywhere except at the image label (where there is a 1)
+        """Computes the partial derivatives of the cost function with respect to
+        the weights and biases of the network
+        training_example is a tuple with element fisrt element an np array and
+        the second, an array of length 10 of zeros everywhere except at the
+        image label where there is a 1
+
         Returns a tuple of numpy arrays containing the required derivatives"""
 
         if len(training_example) != 2:
             raise TypeError("Expected input of size 2")
-        if type(training_example[0]) == type(np.zeros((784, 1))):
+        if isinstance(training_example[0], np.array):
             if training_example[0].shape != (784, 1):
-                raise TypeError("Expected list with 1st element being a 784 x 1 numpy array")
+                raise TypeError("Expected list with 1st element\
+                                 being a 784 x 1 numpy array")
         else:
-            raise TypeError("Expected a numpy array for first element of input")
+            raise TypeError("Expected a numpy array for\
+                            first element of input")
 
         x_train, y_train = training_example
         activations, z = self.forward_prop(x_train)
+
         delta_b = np.array(self.biases[:])
         delta_w = np.array(self.weights[:])
-        delta_L = self.cost_derivative(activations[-1], y_train) * sigmoid_derivative(z[-1])
+
+        delta_L = self.cost_derivative(activations[-1],
+                                       y_train) * sigmoid_derivative(z[-1])
 
         delta_b[-1] = delta_L
         delta_w[-1] = np.outer(delta_L, activations[-2])
         delta = delta_L
+
         for i in range(2, self.num_layers):
             sd = sigmoid_derivative(z[-i])
             delta = np.dot(self.weights[-i + 1].transpose(), delta) * sd
@@ -120,7 +141,7 @@ class NN_hwr(object):
     def train_batch(self, batch, learning_rate):
         """ Trains the network with one subset of the training data.
         Input is the subset of training data for witch the network is
-        to be trained. Learning rate governs the rate at which the 
+        to be trained. Learning rate governs the rate at which the
         Weights and biases change in the gradient descent algorithm"""
 
         delta_b_sum = [np.zeros(b.shape) for b in self.biases]
@@ -172,6 +193,7 @@ def load_data(path):
         path = os.path.splitext(os.path.splitext(path)[0])[0]
     data_dict = sio.loadmat(path)
     return data_dict['X_train'], data_dict['y_train']
+
 
 if __name__ == '__main__':
     X_train, y_train = load_data("./traindata.mat.tar.gz")
