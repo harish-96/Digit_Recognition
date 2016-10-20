@@ -68,63 +68,57 @@ class NN_hwr(object):
             activations.append(sigmoid(z[-1]))
         return activations[1:], z
 
-    # def back_prop(self, training_example):
-    #     """training_example is a tuple with element one an np array and element 2 a scalar"""
-    #     x_train, y_train = training_example
-    #     activations, z = self.forward_prop(x_train)
-    #     delta_b = np.array(self.biases[:])
-    #     delta_w = np.array(self.weights[:])
-    #     delta_L = self.cost_derivative(activations[-1], y_train) * sigmoid_derivative(z[-1])
-
-    #     delta_b[-1] = delta_L
-    #     delta_w[-1] = np.outer(delta_L, activations[-2])
-    #     delta = delta_L
-    #     for i in range(2, self.num_layers - 1):
-    #         sd = sigmoid_derivative(z[-i])
-    #         delta = np.outer(self.weights[-i + 1].transpose(), delta) * sd
-    #         delta_b[-i] = delta
-    #         if i == 1:
-    #             ac = x_train
-    #         else:
-    #             ac = activations[-i - 1]
-    #         delta_w[-i] = np.outer(delta, ac)
-    #     return (delta_b, delta_w)
-
     def back_prop(self, training_example):
-        """Return a tuple ``(nabla_b, nabla_w)`` representing the
-        gradient for the cost function C_x.  ``nabla_b`` and
-        ``nabla_w`` are layer-by-layer lists of numpy arrays, similar
-        to ``self.biases`` and ``self.weights``."""
-        x, y = training_example
-        nabla_b = [np.zeros(b.shape) for b in self.biases]
-        nabla_w = [np.zeros(w.shape) for w in self.weights]
-        # feedforward
-        activation = x
-        activations = [x]  # list to store all the activations, layer by layer
-        zs = []  # list to store all the z vectors, layer by layer
-        for b, w in zip(self.biases, self.weights):
-            z = np.dot(w, activation) + b
-            zs.append(z)
-            activation = sigmoid(z)
-            activations.append(activation)
-        # backward pass
-        delta = self.cost_derivative(activations[-1], y) * \
-            sigmoid_derivative(zs[-1])
-        nabla_b[-1] = delta
-        nabla_w[-1] = np.dot(delta, activations[-2].transpose())
-        # Note that the variable l in the loop below is used a little
-        # differently to the notation in Chapter 2 of the book.  Here,
-        # l = 1 means the last layer of neurons, l = 2 is the
-        # second-last layer, and so on.  It's a renumbering of the
-        # scheme in the book, used here to take advantage of the fact
-        # that Python can use negative indices in lists.
-        for l in range(2, self.num_layers):
-            z = zs[-l]
-            sp = sigmoid_derivative(z)
-            delta = np.dot(self.weights[-l + 1].transpose(), delta) * sp
-            nabla_b[-l] = delta
-            nabla_w[-l] = np.dot(delta, activations[-l - 1].transpose())
-        return (nabla_b, nabla_w)
+        """training_example is a tuple with element one an np array and element 2 a scalar"""
+        x_train, y_train = training_example
+        activations, z = self.forward_prop(x_train)
+        delta_b = np.array(self.biases[:])
+        delta_w = np.array(self.weights[:])
+        delta_L = self.cost_derivative(activations[-1], y_train) * sigmoid_derivative(z[-1])
+
+        delta_b[-1] = delta_L
+        delta_w[-1] = np.outer(delta_L, activations[-2])
+        delta = delta_L
+        for i in range(2, self.num_layers):
+            sd = sigmoid_derivative(z[-i])
+            delta = np.dot(self.weights[-i + 1].transpose(), delta) * sd
+            delta_b[-i] = delta
+            if i == self.num_layers - 1:
+                ac = x_train
+            else:
+                ac = activations[-i - 1]
+            delta_w[-i] = np.outer(delta, ac)
+        return (delta_b, delta_w)
+
+    # def back_prop(self, training_example):
+    #     """Return a tuple ``(nabla_b, nabla_w)`` representing the
+    #     gradient for the cost function C_x.  ``nabla_b`` and
+    #     ``nabla_w`` are layer-by-layer lists of numpy arrays, similar
+    #     to ``self.biases`` and ``self.weights``."""
+    #     x, y = training_example
+    #     nabla_b = [np.zeros(b.shape) for b in self.biases]
+    #     nabla_w = [np.zeros(w.shape) for w in self.weights]
+    #     # feedforward
+    #     activation = x
+    #     activations = [x]  # list to store all the activations, layer by layer
+    #     zs = []  # list to store all the z vectors, layer by layer
+    #     for b, w in zip(self.biases, self.weights):
+    #         z = np.dot(w, activation) + b
+    #         zs.append(z)
+    #         activation = sigmoid(z)
+    #         activations.append(activation)
+    #     # backward pass
+    #     delta = self.cost_derivative(activations[-1], y) * \
+    #         sigmoid_derivative(zs[-1])
+    #     nabla_b[-1] = delta
+    #     nabla_w[-1] = np.dot(delta, activations[-2].transpose())
+    #     for l in range(2, self.num_layers):
+    #         z = zs[-l]
+    #         sp = sigmoid_derivative(z)
+    #         delta = np.dot(self.weights[-l + 1].transpose(), delta) * sp
+    #         nabla_b[-l] = delta
+    #         nabla_w[-l] = np.dot(delta, activations[-l - 1].transpose())
+    #     return (nabla_b, nabla_w)
 
     def train_batch(self, batch, learning_rate):
         """ batch is a list of tuples with first element being a numpy array and second a scalar"""
@@ -175,18 +169,18 @@ def load_data(path):
 
 
 X_train, y_train = load_data("./traindata.mat")
-display_data(X_train[:10], 2, 5)
+# display_data(X_train[:10], 2, 5)
 
 nn = NN_hwr([len(X_train[0]), 15, 10])
 nn.train_nn(X_train, y_train, 5, 20, 0.03)
 
-accuracy = 0
-for i in range(20, 40):
-    out = nn.forward_prop(X_train[i])[0][-1]
-    if np.argmax(out) == np.where(y_train[i])[0][0]:
-        accuracy += 1
-        print(True, np.argmax(out))
-    else:
-        print(False, np.argmax(out))
-print("accuracy: ", accuracy)
-display_data(X_train[20:40], 4, 5)
+# accuracy = 0
+# for i in range(20, 40):
+#     out = nn.forward_prop(X_train[i])[0][-1]
+#     if np.argmax(out) == np.where(y_train[i])[0][0]:
+#         accuracy += 1
+#         print(True, np.argmax(out))
+#     else:
+#         print(False, np.argmax(out))
+# print("accuracy: ", accuracy)
+# display_data(X_train[20:40], 4, 5)
