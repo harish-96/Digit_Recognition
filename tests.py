@@ -1,7 +1,7 @@
 import unittest
 import math
 import numpy as np
-from text_recog import *
+from NeuralNet import *
 
 
 class TestNeuralNetwork(unittest.TestCase):
@@ -27,7 +27,6 @@ class TestNeuralNetwork(unittest.TestCase):
     def test_back_prop_rejects_inputs_of_incorrect_sizes(self):
         self.assertRaises(TypeError, nn.back_prop, [np.zeros((782, 1)), np.zeros((1, 10))])
         self.assertRaises(TypeError, nn.back_prop, ["abc", "def"])
-
 
 
 if __name__ == '__main__':
