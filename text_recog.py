@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import random
 import scipy.io as sio
 import tarfile
+import os
 
 
 def unpack_dat(imgpath, labpath):
@@ -40,22 +41,29 @@ def display_data(imgs, nrows=1, ncols=1, nx_pixels=28, ny_pixels=28):
 
 
 def sigmoid(z):
-    """-------------------"""
+    """Evaluates the sigmoid function at the given input
+    Returns a numpy array"""
     z = np.asarray(z)
     return 1.0 / (1.0 + np.exp(-z))
 
 
 def sigmoid_derivative(z):
+    """Evaluates the derivative of the sigmoid function at the given input
+    Returns a numpy array"""
     return sigmoid(z) * (1 - sigmoid(z))
 
 
 class NN_hwr(object):
-    """A template class for a neural network to recognise handwritten text"""
+    """A template class for a neural network to recognise handwritten text
+    Initialise with a list with each element being the number of neurons in that layer
+    For example: neural_net = NN_hwr([400, 30, 10]) creates a neural network with 3 layers
+    and 400, 30 and 10 as their sizes"""
 
     def __init__(self, num_neurons_list):
+        """Input must be a list of numbers."""
         for i in num_neurons_list:
-            if type(i) not in [type(2), type(2.0)]:
-                raise TypeError("Expected a numeric type")
+            if type(i) not in [type(2)]:
+                raise TypeError("Expected integer type")
         self.num_layers = len(num_neurons_list)
         self.num_neurons_list = num_neurons_list
         self.biases = [np.random.randn(y, 1) for y in num_neurons_list[1:]]
@@ -63,6 +71,9 @@ class NN_hwr(object):
                         for x, y in zip(num_neurons_list[:-1], num_neurons_list[1:])]
 
     def forward_prop(self, x_train):
+        """Computes the activations and weighted inputs of the neurons in the network for the
+        given input data
+        Returns a tuple of lists containing the activations and weighted inputs"""
         activations = []
         z = []
         activations.append(x_train)
@@ -72,7 +83,12 @@ class NN_hwr(object):
         return activations[1:], z
 
     def back_prop(self, training_example):
-        """training_example is a tuple with element one an np array and element 2 a scalar"""
+        """Computes the partial derivatives of the cost function with respect to the weights
+        and biases of the network
+        training_example is a tuple with element one an np array and element 2 an array
+        of length 10 of zeros everywhere except at the image label (where there is a 1)
+        Returns a tuple of numpy arrays containing the required derivatives"""
+
         if len(training_example) != 2:
             raise TypeError("Expected input of size 2")
         if training_example[0].shape != (784, 1):
@@ -99,23 +115,28 @@ class NN_hwr(object):
         return (delta_b, delta_w)
 
     def train_batch(self, batch, learning_rate):
-        """ batch is a list of tuples with first element being a numpy array and second a scalar"""
+        """ Trains the network with one subset of the training data.
+        Input is the subset of training data for witch the network is
+        to be trained. Learning rate governs the rate at which the 
+        Weights and biases change in the gradient descent algorithm"""
+
         delta_b_sum = [np.zeros(b.shape) for b in self.biases]
         delta_w_sum = [np.zeros(w.shape) for w in self.weights]
         for training_example in batch:
             delta_b, delta_w = self.back_prop(training_example)
-            # delta_b_sum += delta_b
-            # delta_w_sum += delta_w
-            delta_b_sum = [db + ddb for db, ddb in zip(delta_b_sum, delta_b)]
-            delta_w_sum = [nw + dnw for nw, dnw in zip(delta_w_sum, delta_w)]
-        # self.biases = self.biases - learning_rate * delta_b_sum
-        # self.weights = self.weights - learning_rate * delta_w_sum
-        self.weights = [w - (learning_rate / len(batch)) * nw
-                        for w, nw in zip(self.weights, delta_w_sum)]
-        self.biases = [b - (learning_rate / len(batch)) * nb
-                       for b, nb in zip(self.biases, delta_b_sum)]
+            delta_b_sum += delta_b
+            delta_w_sum += delta_w
+        self.biases = self.biases - learning_rate * delta_b_sum
+        self.weights = self.weights - learning_rate * delta_w_sum
 
     def train_nn(self, X_train, y_train, n_epochs, batch_size, learning_rate):
+        """Trains the neural network with the test data. n_epochs is the number
+        sweeps over the whole data. batch_size is the number of training example per
+        batch in the stochastic gradient descent. X_train and y_train are the images and
+        labels in the training data. X_train must be a 2-D array with only one row and 
+        y_train is an array of length 10 of zeros everywhere except at the image 
+        label (where there is a 1)"""
+
         m = len(y_train)
         train_data = list(zip(X_train, y_train))
 
@@ -128,37 +149,41 @@ class NN_hwr(object):
             print("epoch no: %d" % i, self.cost_function(X_train, y_train))
 
     def cost_function(self, X_train, y_train):
-        pass
-    #     J = 0
-    #     for i in range(len(y_train)):
-    #         J += 0.5 * np.sum((self.forward_prop(X_train[i])[0][-1] - y_train)**2)
-    #     return J
+        J = 0
+        # for i in range(len(y_train)):
+            # J += 0.5 * np.sum((self.forward_prop(X_train[i])[0][-1]  - y_train)**2)
+        return J
 
     def cost_derivative(self, activation, y):
+        """Computes the derivative of the cost function given the output activations and 
+        the labels"""
         return np.array(activation) - y
 
 
 def load_data(path):
-    tfile = tarfile.open(path + ".tar.gz", 'r:gz')
-    tfile.extractall(".")
-    tfile.close()
+    """Loads the image data from the path provided and returns the images and labels"""
+    if os.path.splitext(path)[1] == '.gz':
+        tfile = tarfile.open(path)
+        tfile.extractall(".")
+        tfile.close()
+        path = os.path.splitext(os.path.splitext(path)[0])[0]
     data_dict = sio.loadmat(path)
     return data_dict['X_train'], data_dict['y_train']
 
+if __name__ == '__main__':
+    X_train, y_train = load_data("./traindata.mat.tar.gz")
+    X_test, y_test = load_data("./testdata.mat.tar.gz")
+    display_data(X_train[:10], 2, 5)
 
-# X_train, y_train = load_data("./traindata.mat")
-# display_data(X_train[:10], 2, 5)
+    nn = NN_hwr([len(X_train[0]), 15, 10])
+    nn.train_nn(X_train, y_train, 10, 20, 0.06)
 
-# nn = NN_hwr([len(X_train[0]), 15, 10])
-# nn.train_nn(X_train, y_train, 5, 20, 0.03)
-
-# accuracy = 0
-# for i in range(20, 40):
-#     out = nn.forward_prop(X_train[i])[0][-1]
-#     if np.argmax(out) == np.where(y_train[i])[0][0]:
-#         accuracy += 1
-#         print(True, np.argmax(out))
-#     else:
-#         print(False, np.argmax(out))
-# print("accuracy: ", accuracy)
-# display_data(X_train[20:40], 4, 5)
+    accuracy = 0
+    for i in range(len(X_test)):
+        out = nn.forward_prop(X_test[i])[0][-1]
+        if np.argmax(out) == np.where(y_test[i])[0][0]:
+            accuracy += 1
+            print(True, np.argmax(out))
+        else:
+            print(False, np.argmax(out))
+    print("accuracy: ", accuracy)
