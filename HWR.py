@@ -1,6 +1,7 @@
 import numpy as np
 import struct
 import random
+import matplotlib.pyplot as plt
 
 
 class HWR(object):
@@ -25,7 +26,7 @@ class HWR(object):
         total_delta_b = [np.zeros(b.shape) for b in self.biases]
         total_delta_w = [np.zeros(w.shape) for w in self.weights]
         for x,y in batch:
-            delta_b , delta_w = self.backprop(x,y)
+            delta_b , delta_w = self.back_propagation(x,y)
             total_delta_b = total_delta_b + delta_b
             total_delta_w = total_delta_w + delta_w
         self.biases = self.biases-((learning_rate/len(batch))*total_delta_b)
@@ -79,4 +80,26 @@ def unpack_dat(imgpath, labpath):
         magic_num, n_dim, n_rows, n_cols = struct.unpack(">iiii", 
                                            f.read(16))
         image_input = np.fromfile(f, dtype=np.uint8).reshape(len(labels), 784)
-        return zip(image_input, labels)
+        return image_input, labels
+
+
+def display_data(imgs, nrows, ncols, nx_pixels=28, ny_pixels=28):
+    """Dispay the images given in X. 'nrows' and 'ncols' are
+    the number of rows and columns in the displayed data"""
+    fig, ax = plt.subplots(nrows=nrows, ncols=ncols, sharex=True, sharey=True,)
+    ax = ax.flatten()
+
+    for i in range(nrows * ncols):
+        ax[i].imshow(imgs[i].reshape(nx_pixels, ny_pixels),
+                     cmap='Greys', interpolation="bicubic")
+    plt.tight_layout()
+    plt.show()
+
+
+X_train, y_train = unpack_dat("./train-images.idx3-ubyte", "./train-labels.idx1-ubyte")
+display_data(X_train[:10], 2, 5)
+
+nn = HWR([len(X_train[0]), 15, 10])
+nn.train_using_SGD(zip(X_train[1:10], y_train[1:10]), 100, 1, 0.01)
+# print(nn.feedforward(X_train[5])[0][-1])
+# print("expected output is %d" % (y_train[5]))
