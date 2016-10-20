@@ -91,8 +91,11 @@ class NN_hwr(object):
 
         if len(training_example) != 2:
             raise TypeError("Expected input of size 2")
-        if training_example[0].shape != (784, 1):
-            raise TypeError("Expected list with 1st element a (784, 1) numpy array")
+        if type(training_example[0]) == type(np.zeros((784, 1))):
+            if training_example[0].shape != (784, 1):
+                raise TypeError("Expected list with 1st element being a 784 x 1 numpy array")
+        else:
+            raise TypeError("Expected a numpy array for first element of input")
 
         x_train, y_train = training_example
         activations, z = self.forward_prop(x_train)
