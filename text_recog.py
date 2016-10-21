@@ -106,7 +106,7 @@ class NN_hwr(object):
 
         if len(training_example) != 2:
             raise TypeError("Expected input of size 2")
-        if isinstance(training_example[0], np.array):
+        if isinstance(training_example[0], np.ndarray):
             if training_example[0].shape != (784, 1):
                 raise TypeError("Expected list with 1st element\
                                  being a 784 x 1 numpy array")
@@ -192,19 +192,22 @@ def load_data(path):
         tfile.close()
         path = os.path.splitext(os.path.splitext(path)[0])[0]
     data_dict = sio.loadmat(path)
-    return data_dict['X_train'], data_dict['y_train']
+    if 'train' in path:
+        return data_dict['X_train'], data_dict['y_train']
+    else:
+        return data_dict['X_test'], data_dict['y_test']
 
 
 if __name__ == '__main__':
-    X_train, y_train = load_data("./traindata.mat.tar.gz")
-    X_test, y_test = load_data("./testdata.mat.tar.gz")
+    X_train, y_train = load_data("./data/traindata.mat.tar.gz")
+    X_test, y_test = load_data("./data/testdata.mat.tar.gz")
     display_data(X_train[:10], 2, 5)
 
     nn = NN_hwr([len(X_train[0]), 15, 10])
     nn.train_nn(X_train, y_train, 10, 20, 0.06)
 
     accuracy = 0
-    for i in range(len(X_test)):
+    for i in range(len(X_test[:100])):
         out = nn.forward_prop(X_test[i])[0][-1]
         if np.argmax(out) == np.where(y_test[i])[0][0]:
             accuracy += 1
