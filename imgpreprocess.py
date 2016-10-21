@@ -3,7 +3,7 @@ imgpreprocess.py
 ~~~~~~~~~~~~~~~~
 A module to preprocess and segement an image containing text 
 into lines , words and characters.And also change resolution of 
-the segmented characters to the resolution required by the NeuralNet.py 
+the segmented characters to the resolution required by the Neural Network 
 to recognise the characters.
 """
 

@@ -7,7 +7,7 @@ from text_recog import *
 class TestNeuralNetwork(unittest.TestCase):
 
     def setUp(self):
-        self.X_train, self.y_train = load_data("./traindata.mat.tar.gz")
+        self.X_train, self.y_train = load_data("./data/traindata.mat.tar.gz")
         self.nn = NN_hwr([len(self.X_train[0]), 50, 10])
 
     def test_NN_hwr_raises_exception_for_non_numeric_values(self):

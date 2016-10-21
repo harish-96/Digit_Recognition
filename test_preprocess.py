@@ -4,7 +4,7 @@ import numpy
 
 class Test_Preprocess(unittest.TestCase):
     def setUp(self):
-        self.imagepath = "testimage2.jpg"
+        self.imagepath = "testimage.png"
         self.PP = Preprocess(self.imagepath)
     def test_Preprocess_raises_error_for_invalid_file_or_not_found(self):
         self.assertRaises(IOError , Preprocess , "somefilename")
