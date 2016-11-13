@@ -1,4 +1,6 @@
 import numpy as np
+import random
+import matplotlib.pyplot as plt
 
 
 class Particle:
@@ -58,3 +60,48 @@ class Swarm(Particle):
         gbest_index = np.argmin([self.error_function(self.swarm[i].position)
                                  for i in range(self.numParticles)])
         self.gbest = self.swarm[gbest_index].position
+
+    def update_step(self):
+        """Update the positions of the particles in the swarm and also the velocities
+        according to the rule specified by the PSO heuristic"""
+        for i in range(self.numParticles):
+            self.r1, self.r2 = np.random.rand(2)
+            self.swarm[i].velocity = (self.w * self.swarm[i].velocity +
+                                      self.c1 * self.r1 * (self.swarm[i].pbest - self.swarm[i].position) +
+                                      self.c2 * self.r2 * (self.gbest - self.swarm[i].position))
+            self.swarm[i].position = (self.swarm[i].position +
+                                      self.swarm[i].velocity)
+            self.swarm[i].update_pbest(self.error_function)
+
+            rnd = random.random()
+            if rnd < self.pdeath:
+                self.swarm[i].__init__(self.dimension)
+        self.update_gbest()
+
+    def optimise(self, iterations=100):
+        """The function to be called to solve the optimisation problem.
+        Call with iterations being the number of iterations for which the
+        the optimisation is to be carried out"""
+
+        it = 0
+        J = []
+        while self.error_function(self.gbest) > self.exit_error:
+            J.append(self.error_function(self.gbest))
+            if it % 10 == 0:
+                self.display_positions()
+                plt.show()
+            self.update_step()
+            it += 1
+            print("iteration: ", it, "cost: ", J[-1])
+            if it > iterations:
+                break
+        plt.plot(J)
+        plt.show()
+        return J
+
+    def display_positions(self):
+        """Display the first 2 dimensions of the positions of the
+        particles at any given time"""
+        x_pos = [self.swarm[i].position[0] for i in range(self.numParticles)]
+        y_pos = [self.swarm[i].position[1] for i in range(self.numParticles)]
+        plt.plot(x_pos, y_pos, 'r*')
