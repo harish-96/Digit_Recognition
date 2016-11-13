@@ -174,8 +174,8 @@ class NN_hwr(object):
 
     def cost_function(self, X_train, y_train):
         J = 0
-        # for i in range(len(y_train)):
-            # J += 0.5 * np.sum((self.forward_prop(X_train[i])[0][-1]  - y_train)**2)
+        for i in range(len(y_train)):
+            J += 0.5 * np.sum((self.forward_prop(X_train[i])[0][-1]  - y_train[i])**2)
         return J
 
     def cost_derivative(self, activation, y):
@@ -188,7 +188,7 @@ def load_data(path):
     """Loads the image data from the path provided and returns the images and labels"""
     if os.path.splitext(path)[1] == '.gz':
         tfile = tarfile.open(path)
-        tfile.extractall(".")
+        tfile.extractall("./data/")
         tfile.close()
         path = os.path.splitext(os.path.splitext(path)[0])[0]
     data_dict = sio.loadmat(path)
