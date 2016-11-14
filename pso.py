@@ -9,6 +9,18 @@ class Particle:
     and bounds for the variables"""
 
     def __init__(self, dimension, X_max=5, X_min=-5):
+
+        if type(dimension) != type([1,2,3]):
+            raise TypeError("Expected list of dimensions")
+        for i in dimension:
+            if type(i) not in [type(2)]:
+                    raise TypeError("Expected integer type")
+        if type(X_max) != type(3):
+            if type(X_max) != type(3.1):
+                if type(X_max) != type(3):
+                    if type(X_max) != type(3.1):
+                        raise TypeError("Expected numeric type fot bounds")
+
         self.position = []
         self.velocity = []
         for d in dimension:
