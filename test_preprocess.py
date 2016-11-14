@@ -14,12 +14,19 @@ class Test_Preprocess(unittest.TestCase):
         binaryimage = binaryimg(self.PP.image)
         self.assertEqual(type(binaryimage),numpy.matrixlib.defmatrix.matrix)
         self.assertTrue(numpy.all(binaryimage) in [0,1])
-    def test_cropimg_outputs_matrix(self):
-        self.assertEqual(type(cropimg(binaryimg(self.PP.image))),numpy.matrixlib.defmatrix.matrix)
+    def test_cropimg_outputs_a_binary_matrix(self):
+        croppedimage = cropimg(binaryimg(self.PP.image))
+        self.assertEqual(type(croppedimage),numpy.matrixlib.defmatrix.matrix)
+        self.assertTrue(numpy.all(croppedimage) in [0,1])
     def test_segment_lines_outputs_list_of_matrices(self):
         lines = self.PP.segment_lines()
         self.assertEqual(type(lines),list)
         self.assertEqual(type(lines[0]),numpy.matrixlib.defmatrix.matrix)
+    def test_segment_characters_outputs_list_of_matrices(self):
+        lines = self.PP.segment_lines()
+        char0 = segment_characters(lines[0])
+        self.assertEqual(type(char0),list)
+        self.assertEqual(type(char0[0]),numpy.matrixlib.defmatrix.matrix)
         
     def tearDown(self):
         del self.PP

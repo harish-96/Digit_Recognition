@@ -104,7 +104,7 @@ def segment_characters(line):
     chars = []
     cimg = line.copy()
     last_character = last_char(cimg)
-    while not np.sum(cimg) == np.sum(last_char):
+    while not np.sum(cimg) == np.sum(last_character):
         m,n = cimg.shape
         p = 0
         for i in range(1,n):
