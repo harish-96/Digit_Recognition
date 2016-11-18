@@ -14,20 +14,20 @@ import os
 
 class Preprocess(object):
     def __init__(self,imagepath):
-	"""imagepath is the address of the image that needs to be preprocessed"""
+        """imagepath is the address of the image that needs to be preprocessed"""
         if type(imagepath) == str:
             if os.path.isfile(imagepath):
                 try:
                     self.image = cv2.imread(imagepath,0)
                 except IOError:
-                    print imagepath, "not an image file" 
+                    print(imagepath, "not an image file")
             else:
                 raise   IOError("File doesnot exist")
         else:
             raise TypeError("Expected imagepath as a string")
 
     def segment_lines(self):
-	"""The image containing text is segmented into lines and returns a list of the lines""" 
+        """The image containing text is segmented into lines and returns a list of the lines""" 
         cropped_image = cropimg(binaryimg(self.image))
         lines = []
         limg = cropped_image.copy()

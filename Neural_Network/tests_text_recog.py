@@ -39,12 +39,15 @@ class TestNeuralNetwork(unittest.TestCase):
             out = self.nn.forward_prop(self.X_train[i])[0][-1]
             if np.argmax(out) == np.where(self.y_train[i])[0][0]:
                 count += 1
-        self.assertGreaterEqual(count, 8)
+            else:
+                print("Incorrect", np.argmax(out),
+                      np.where(self.y_train[i])[0][0])
+        self.assertGreaterEqual(count, 7)
 
     def test_nn_predicts_accurate_results(self):
-        self.nn.train_nn(self.X_train, self.y_train, 10, 10, 0.06)
+        self.nn.train_nn(self.X_train, self.y_train, 6, 10, 0.06)
         accuracy = 0
-        X_test, y_test = load_data("testdata.mat.tar.gz")
+        X_test, y_test = load_data("../data/testdata.mat.tar.gz")
         for i in range(len(X_test[:100])):
             out = self.nn.forward_prop(X_test[i])[0][-1]
             if np.argmax(out) == np.where(y_test[i])[0][0]:
