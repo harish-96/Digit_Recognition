@@ -55,7 +55,7 @@ def display_data(imgs, nrows=1, ncols=1, nx_pixels=28, ny_pixels=28):
 def sigmoid(z):
     """Evaluates the sigmoid function at the given input
 
-    :param numeric, array-like z: Could be a number, list or Numpy array for which sigmoid is to be evaluated
+    :param array-like z: Could be a number, list or Numpy array for which sigmoid is to be evaluated
 
     :return: numpy array"""
 
@@ -66,7 +66,7 @@ def sigmoid(z):
 def sigmoid_derivative(z):
     """Evaluates the derivative of the sigmoid function at the given input
 
-    :param numeric, array-like z: Could be a number, list or Numpy array for which sigmoid derivative is to be evaluated
+    :param array-like z: Could be a number, list or Numpy array for which sigmoid derivative is to be evaluated
 
     :return: Numpy array"""
 
@@ -166,7 +166,17 @@ class NN_hwr(object):
         """ Trains the network with one subset of the training data.
         Input is the subset of training data for witch the network is
         to be trained. Learning rate governs the rate at which the
-        Weights and biases change in the gradient descent algorithm"""
+        Weights and biases change in the gradient descent algorithm
+
+        :param ndarray batch: An array of training examples with each
+        being a tuple containing the input data and its label.
+
+        :param fload learning_rate: The learning rate which determines
+        the step size in gradient descent
+
+        :return: None
+
+        """
 
         delta_b_sum = [np.zeros(b.shape) for b in self.biases]
         delta_w_sum = [np.zeros(w.shape) for w in self.weights]
@@ -179,11 +189,28 @@ class NN_hwr(object):
 
     def train_nn(self, X_train, y_train, n_epochs, batch_size, learning_rate):
         """Trains the neural network with the test data. n_epochs is the number
-        sweeps over the whole data. batch_size is the number of training example per
-        batch in the stochastic gradient descent. X_train and y_train are the images and
-        labels in the training data. X_train must be a 2-D array with only one row and 
-        y_train is an array of length 10 of zeros everywhere except at the image 
-        label (where there is a 1)"""
+        sweeps over the whole data. batch_size is the number of training
+        example per batch in the stochastic gradient descent. X_train and
+        y_train are the images and labels in the training data. X_train must
+        be a 2-D array with only one row and y_train is an array of length 10
+        of zeros everywhere except at the image label (where there is a 1)
+
+        :param ndarray X_train: Numpy array containing the input training data
+        :param ndarray y_train: Numpy array containing the labels for training.
+        Formatted as an array of arrays with 1 at the label position and 0
+        everywhere else
+
+        :param int n_epochs: The number of sweeps over the data-set in the
+        Stochastic Gradient Descent
+
+        :param int batch_size: Number of training examples per batch in the
+        Stochastic Gradient Descent
+
+        :param fload learning_rate: The learning rate which determines the
+        step size in gradient descent
+
+        :return: None
+        """
 
         m = len(y_train)
         train_data = list(zip(X_train, y_train))
@@ -197,19 +224,44 @@ class NN_hwr(object):
             print("epoch no: %d" % i, self.cost_function(X_train, y_train))
 
     def cost_function(self, X_train, y_train):
+        """Computes the quadratic cost function of the Neural Network
+
+        :param ndarray X_train: Input data for training
+        :param ndarray y_train: Labels corresponding to the inputs
+
+        :return: Float value of the cost function of the Neural Network
+
+        """
         J = 0
         for i in range(len(y_train)):
-            J += 0.5 * np.sum((self.forward_prop(X_train[i])[0][-1]  - y_train[i])**2)
+            J += 0.5 * np.sum((self.forward_prop(X_train[i])
+                               [0][-1] - y_train[i])**2)
         return J
 
     def cost_derivative(self, activation, y):
-        """Computes the derivative of the cost function given the output activations and 
-        the labels"""
+        """Computes the derivative of the cost function given output activations and
+        the labels
+
+        :param ndarray activation: Activations of the neurons for a given input
+        :param list y: The expected output for the input
+
+        :return: Float value of the cost function of the Neural Network
+
+        """
         return np.array(activation) - y
 
 
 def load_data(path):
-    """Loads the image data from the path provided and returns the images and labels"""
+    """Loads the image data from the path provided and returns the images and
+    labels
+
+    :param string path: The path to the file where the training/test data is
+    present
+
+    :return: A dictionary object containing the input data and labels
+    Keys of the dict object -- 'X_train' and 'y_train' or 'X_test' and 'y_test'
+
+    """
     if os.path.splitext(path)[1] == '.gz':
         tfile = tarfile.open(path)
         tfile.extractall("../data/")
