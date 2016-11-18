@@ -9,7 +9,7 @@ import os
 
 def unpack_dat(imgpath, labpath):
     """ Unpack images and labels obtained online from
-    http://yann.lecun.com/exdb/mnist/
+    `MNIST Database <http://yann.lecun.com/exdb/mnist/>`_
     """
     with open(labpath, 'rb') as f:
         magic_no, n_dim = struct.unpack('>ii', f.read(8))
@@ -28,8 +28,16 @@ def unpack_dat(imgpath, labpath):
 
 
 def display_data(imgs, nrows=1, ncols=1, nx_pixels=28, ny_pixels=28):
-    """Dispay the images given in X. 'nrows' and 'ncols' are
-    the number of rows and columns in the displayed data"""
+    """Dispay the images given in X.
+
+    :param int nrows: The number of plots per column. The default value is 1
+    :param int ncols: The number of plots per row. The default value is 1
+    :param int nx_pixels: The number of pixels along axis 1. The default value is 28
+    :param int ny_pixels: The number of pixels along axis 2. The default value is 28
+
+    :return: None.\ Displays the Image Data
+
+    """
     fig, ax = plt.subplots(nrows=nrows, ncols=ncols, sharex=True, sharey=True,)
 
     if (nrows + ncols) == 2:
@@ -46,7 +54,10 @@ def display_data(imgs, nrows=1, ncols=1, nx_pixels=28, ny_pixels=28):
 
 def sigmoid(z):
     """Evaluates the sigmoid function at the given input
-    Returns a numpy array"""
+
+    :param numeric, array-like z: Could be a number, list or Numpy array for which sigmoid is to be evaluated
+
+    :return: numpy array"""
 
     z = np.asarray(z)
     return 1.0 / (1.0 + np.exp(-z))
@@ -54,7 +65,10 @@ def sigmoid(z):
 
 def sigmoid_derivative(z):
     """Evaluates the derivative of the sigmoid function at the given input
-    Returns a numpy array"""
+
+    :param numeric, array-like z: Could be a number, list or Numpy array for which sigmoid derivative is to be evaluated
+
+    :return: Numpy array"""
 
     return sigmoid(z) * (1 - sigmoid(z))
 
@@ -63,12 +77,17 @@ class NN_hwr(object):
     """A template class for a neural network to recognise handwritten text
     Initialise with a list with each element being the number of neurons in
     that layer
-    For example: neural_net = NN_hwr([400, 30, 10]) creates a neural network
-    with 3 layers and 400, 30 and 10 as their sizes"""
+    For the init function, the parameters are
+
+    :param list num_neurons_list: Create a neural network number of neuron per layer given by the list
+
+    """
 
     def __init__(self, num_neurons_list):
-        """Input must be a list of numbers."""
+        """Input must be a list of numbers
 
+        :param list num_neurons_list: Create a neural network number of neuron per layer given by the list
+        """
         for i in num_neurons_list:
             if type(i) not in [type(2)]:
                 raise TypeError("Expected integer type")
@@ -82,8 +101,11 @@ class NN_hwr(object):
 
     def forward_prop(self, x_train):
         """Computes the activations and weighted inputs of the neurons in
-        the network for the given input data
-        Returns a tuple of lists containing activations and weighted inputs"""
+        the network for the given input data.
+
+        :param ndarray x_train: The input for the first layer which needs to be forwards propogated
+        :return: A tuple of lists containing activations and weighted inputs
+        """
 
         activations = []
         z = []
@@ -102,7 +124,9 @@ class NN_hwr(object):
         the second, an array of length 10 of zeros everywhere except at the
         image label where there is a 1
 
-        Returns a tuple of numpy arrays containing the required derivatives"""
+        :param tuple training_example: Tuple with first element as the input data and the second being its label
+
+        :return: a tuple of numpy arrays containing the required derivatives"""
 
         if len(training_example) != 2:
             raise TypeError("Expected input of size 2")

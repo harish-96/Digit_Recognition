@@ -1,7 +1,7 @@
 import numpy as np
 import random
-from text_recog import *
-from pso import *
+from Neural_Network.text_recog import *
+from Neural_Network.pso import *
 
 
 class NN_pso(object, NN_hwr):

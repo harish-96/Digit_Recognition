@@ -1,5 +1,5 @@
 import unittest
-from pso import *
+from Neural_Network.pso import *
 
 
 class TestPSO(unittest.TestCase):

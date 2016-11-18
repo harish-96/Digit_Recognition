@@ -1,7 +1,7 @@
 import unittest
 import math
 import numpy as np
-from text_recog import *
+from Neural_Network.text_recog import *
 
 
 class TestNeuralNetwork(unittest.TestCase):
