@@ -188,7 +188,7 @@ def load_data(path):
     """Loads the image data from the path provided and returns the images and labels"""
     if os.path.splitext(path)[1] == '.gz':
         tfile = tarfile.open(path)
-        tfile.extractall("./data/")
+        tfile.extractall("../data/")
         tfile.close()
         path = os.path.splitext(os.path.splitext(path)[0])[0]
     data_dict = sio.loadmat(path)
@@ -199,8 +199,8 @@ def load_data(path):
 
 
 if __name__ == '__main__':
-    X_train, y_train = load_data("./data/traindata.mat.tar.gz")
-    X_test, y_test = load_data("./data/testdata.mat.tar.gz")
+    X_train, y_train = load_data("../data/traindata.mat.tar.gz")
+    X_test, y_test = load_data("../data/testdata.mat.tar.gz")
     display_data(X_train[:10], 2, 5)
 
     nn = NN_hwr([len(X_train[0]), 15, 10])

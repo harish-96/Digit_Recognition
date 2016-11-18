@@ -1,10 +1,13 @@
 import unittest
-from pso import *
+import math
+import numpy as np
+from text_recog import *
 
 
-class TestPSO(unittest.TestCase):
+class TestNeuralNetwork(unittest.TestCase):
+
     def setUp(self):
-        self.X_train, self.y_train = load_data("./data/traindata.mat.tar.gz")
+        self.X_train, self.y_train = load_data("../data/traindata.mat.tar.gz")
         self.nn = NN_hwr([len(self.X_train[0]), 30, 10])
 
     def test_NN_hwr_raises_exception_for_non_numeric_values(self):
@@ -41,7 +44,7 @@ class TestPSO(unittest.TestCase):
     def test_nn_predicts_accurate_results(self):
         self.nn.train_nn(self.X_train, self.y_train, 10, 10, 0.06)
         accuracy = 0
-        X_test, y_test = load_data("./data/testdata.mat.tar.gz")
+        X_test, y_test = load_data("../data/testdata.mat.tar.gz")
         for i in range(len(X_test[:100])):
             out = self.nn.forward_prop(X_test[i])[0][-1]
             if np.argmax(out) == np.where(y_test[i])[0][0]:

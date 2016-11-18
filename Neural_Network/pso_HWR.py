@@ -68,7 +68,7 @@ class NN_pso(object, NN_hwr):
 
 
 if __name__ == '__main__':
-    X_train, y_train = load_data("./data/traindata.mat.tar.gz")
+    X_train, y_train = load_data("../data/traindata.mat.tar.gz")
     nn = NN_hwr([784, 15, 10], 100)
     costs = nn.train_nn_pso(X_train[:500], y_train[:500],
                             1, 500, n_iterations=10)
