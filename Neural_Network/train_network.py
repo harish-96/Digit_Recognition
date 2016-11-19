@@ -10,6 +10,12 @@ import matplotlib.pyplot as plt
 def unpack_dat(imgpath, labpath):
     """ Unpack images and labels obtained online from
     `MNIST Database <http://yann.lecun.com/exdb/mnist/>`_
+
+    :param string imgpath: The path for the packed image file of MNIST Database
+    :param string labpath: The path for the packed label file of MNIST Database
+
+    :return: Tuple of list of image pixel values and label values.
+
     """
     with open(labpath, 'rb') as f:
         magic_no, n_dim = struct.unpack('>ii', f.read(8))
@@ -81,18 +87,8 @@ def display_data(imgs, nrows=1, ncols=1, nx_pixels=28, ny_pixels=28):
 if __name__ == '__main__':
     X_train, y_train = load_data("../data/traindata.mat.tar.gz")
     X_test, y_test = load_data("../data/testdata.mat.tar.gz")
-
     nn = nln.NN_hwr([len(X_train[0]), 20, 40, 20, 10])
     nn.train_nn(X_train, y_train, 10, 20, 0.06)
 
-    accuracy = 0
-    for i in range(len(X_test[:100])):
-        out = nn.forward_prop(X_test[i])[0][-1]
-        if np.argmax(out) == np.where(y_test[i])[0][0]:
-            accuracy += 1
-            print(True, np.argmax(out))
-        else:
-            print(False, np.argmax(out))
-
+    print("Accuracy of prediction: ", nn.accuracy(X_test, y_test))
     sio.savemat("../data/weights_biases", {'w': nn.weights, 'b': nn.biases})
-    print("accuracy: ", accuracy)

@@ -1,7 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from Neural_Network.neuralnet import *
-from Neural_Network.train_network import *
 
 
 def add_padding(img, pad_t, pad_r, pad_b, pad_l):

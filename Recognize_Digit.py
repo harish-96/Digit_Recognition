@@ -5,6 +5,7 @@ import Image_Processing.imgpreprocess as igp
 import numpy as np
 from Image_Processing.center_image import *
 from PIL import Image
+import os
 import sys
 
 
@@ -33,9 +34,9 @@ for line in lines:
     numbers = "Line no: " + str(n) + " : "
     for char in igp.segment_characters(line):
         chars.append(char)
+        import pdb;pdb.set_trace()
         char028 = np.zeros((28, 28))
         image = Image.fromarray(char)
-        # char0 = cv2.resize(i, (20, 20))
         char0 = np.array(image.resize((20, 20), Image.ANTIALIAS))
         for i in range(20):
             for j in range(20):

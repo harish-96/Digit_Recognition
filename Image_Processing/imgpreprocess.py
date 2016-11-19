@@ -7,10 +7,9 @@ the segmented characters to the resolution required by the Neural Network
 to recognise the characters.
 """
 
-
-import cv2
 import numpy as np
 import os
+import cv2
 
 
 class Preprocess(object):

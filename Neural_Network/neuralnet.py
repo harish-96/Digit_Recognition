@@ -198,7 +198,7 @@ class NN_hwr(object):
         for i in range(len(y_train)):
             J += 0.5 * np.sum((self.forward_prop(X_train[i])
                                [0][-1] - y_train[i])**2)
-        return J
+        return J / len(y_train)
 
     def cost_derivative(self, activation, y):
         """Computes the derivative of the cost function given output activations and
@@ -211,3 +211,25 @@ class NN_hwr(object):
 
         """
         return np.array(activation) - y
+
+    def accuracy(self, X_test, y_test):
+        """Computes the accuracy with which the Network, once trained classifies
+        the digits.
+
+        :param ndarray X_test: Test data in the same format as that for which
+        the network was trained
+
+        :param ndarray y_test: Labels for the test data. Same format as the
+        labels for training data
+
+        :return: Float value of the accuracy in percentage
+
+        """
+        accuracy = 0
+        for i in range(len(X_test)):
+            out = self.forward_prop(X_test[i])[0][-1]
+            if np.argmax(out) == np.where(y_test[i])[0][0]:
+                accuracy += 1
+
+        accuracy = accuracy / len(X_test) * 100
+        return accuracy
