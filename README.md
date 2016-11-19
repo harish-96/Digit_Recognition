@@ -1,6 +1,7 @@
 ## Synopsis
 
-At the top of the file there should be a short introduction and/ or overview that explains **what** the project is. This description should match descriptions added for package managers (Gemspec, package.json, etc.)
+Given an image containing handwritten numbers, this package segments the image and identifies each digit present in the image.
+Shortly, a handwritten digit recognizing software(a very crude one though).
 
 ## Code Example
 
@@ -8,7 +9,7 @@ Show what the library does as concisely as possible, developers should be able t
 
 ## Motivation
 
-A short description of the motivation behind the creation and maintenance of the project. This should explain **why** the project exists.
+This project has started as part of course on Python. We(Harish and Surya) formed a team and started thinking of ideas then we thought of handwritten digit recognition software using neural networks
 
 ## Installation
 
@@ -25,6 +26,11 @@ Describe and show how to run the tests with code examples.
 ## Contributors
 
 Let people know how they can dive into the project, include important links to things like issue trackers, irc, twitter accounts if applicable.
+Harish Murali,
+emailid: harish2111996@gmail.com
+
+Surya Mohan
+emailid: suryamohan1919@gmail.com, suryamohan@iitb.ac.in
 
 ## License
 

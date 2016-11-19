@@ -1,10 +1,9 @@
 """
 imgpreprocess.py
 ~~~~~~~~~~~~~~~~
-A module to preprocess and segement an image containing text
-into lines , words and characters.And also change resolution of
-the segmented characters to the resolution required by the Neural Network
-to recognise the characters.
+A module to preprocess and segement an image containing digits in several lines
+into lines and further into separate digits. These segmented images of digits 
+are then fed to neural networks for recognition.
 """
 
 import numpy as np
@@ -13,9 +12,11 @@ import cv2
 
 
 class Preprocess(object):
+
+    """Preprocess class is initialized by passing an image as argument."""
+
     def __init__(self, imagepath):
-        """imagepath is the address of the image that needs
-        to be preprocessed"""
+        """:param str imagepath :  the path of the image to be segmented"""
         if type(imagepath) == str:
             if os.path.isfile(imagepath):
                 try:
@@ -29,7 +30,11 @@ class Preprocess(object):
 
     def segment_lines(self):
         """The image containing text is segmented into lines and returns
-        a list of the lines"""
+        a list of the lines
+        
+        :return: List of arrays, each array is a line from image
+
+        """
         cropped_image = cropimg(binaryimg(self.image))
         lines = []
         limg = cropped_image.copy()
@@ -59,8 +64,12 @@ class Preprocess(object):
 
 
 def binaryimg(image):
-    """Converts grayscale image to binary image , it takes 1 for black and
-    it takes zero for white """
+    """Converts grayscale image to binary image , it gives 1 for black and zero
+    for white.
+
+    :param array image : represents the image to be converted to binary
+
+    """
     blur_image = cv2.GaussianBlur(image, (5, 5), 0)
     thresh = np.mean(image)
     retval, binary_image = cv2.threshold(blur_image, thresh, 255,
@@ -79,7 +88,11 @@ def binaryimg(image):
 
 
 def cropimg(image):
-    """Crops a binary image tightly"""
+    """Crops a binary image tightly
+    
+    :param array image:
+
+    """
     m, n = image.shape
     c1 = n
     c2 = 0
@@ -101,7 +114,11 @@ def cropimg(image):
 
 def last_line(img):
     """Takes cropped binary image as input and gives the segment
-    of image containing last line of text"""
+    of image containing last line of text
+    
+    :param array img:
+
+    """
     m, n = img.shape
     for i in list(reversed(range(m - 1))):
         if np.sum(img[i, :]) == 0 and np.sum(img[i + 1, :]) != 0:
@@ -111,8 +128,12 @@ def last_line(img):
 
 
 def segment_characters(line):
-    """Takes a line from a segemented image and returns a list of
-    characters in the line"""
+    """Takes a line from a segemented image and returns a list of 
+    characters in the line.
+    
+    :param array line:
+
+    """
     line = cropimg(line)
     chars = []
     cimg = line.copy()
@@ -133,7 +154,11 @@ def segment_characters(line):
 
 def last_char(img):
     """Takes a line from a segemented image and returns last
-    character in the line"""
+    character in the line
+    
+    :param array img:
+
+    """
     m, n = img.shape
     for i in list(reversed(range(n - 1))):
         if np.sum(img[:, i]) == 0 and np.sum(img[:, i + 1]) != 0:
