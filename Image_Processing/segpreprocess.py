@@ -10,7 +10,7 @@ from scipy import ndimage
 from skimage.morphology import erosion, dilation
 def feedImage(image):
     '''takes an image and attempts to predict the number present using
-        a neural network and pre-processing methods'''
+        a neural network and pre-processing methods :param PIL.Image.Image image : is the input and output is a numpy array'''
     image =  gradual_normalization(image)
     (x, y) = ndimage.measurements.center_of_mass(np.array(image))
     large_window = Image.new("L", (28,28))
@@ -22,7 +22,7 @@ def feedImage(image):
 
 
 def gradual_normalization(  image):
-    #adjusts sizing and stroke to maintain consistency
+    """adjusts sizing and stroke to maintain consistency"""
     while(image.size[0] > 50 and image.size[1] > 50):
         image = image.resize((image.size[0]/2, image.size[1]/2), Image.ANTIALIAS)
         image =  stroke_normalization(image)

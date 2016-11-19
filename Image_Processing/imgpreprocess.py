@@ -13,8 +13,10 @@ import numpy as np
 import os 
 
 class Preprocess(object):
+    """Creates instance of the image to be segmented
+    :param imagepath : is the parameter needed to be given"""
     def __init__(self,imagepath):
-        """imagepath is the address of the image that needs to be preprocessed"""
+        """The image is read using cv2.imread()""" 
         if type(imagepath) == str:
             if os.path.isfile(imagepath):
                 try:
@@ -57,7 +59,8 @@ class Preprocess(object):
 
 
 def binaryimg(image):
-    """Converts grayscale image to binary image , it takes 1 for black and it takes zero for white """
+    """Converts grayscale image to binary image , it gives arrays of 1s and 0s, 1 for black and  0 for white 
+    :param array image : is the array formed from an read as grayscale"""
     blur_image = cv2.GaussianBlur(image,(5,5),0)
     retval,binary_image = cv2.threshold(blur_image,127,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
     m, n = binary_image.shape
@@ -72,7 +75,8 @@ def binaryimg(image):
                 binary_image[j,i]=0
     return binary_image
 def cropimg(image):
-    """Crops a binary image tightly"""
+    """Crops a binary image tightly
+    Input is array form of a binary image :param array image:"""
     m,n = image.shape
     c1 = n 
     c2 = 0
