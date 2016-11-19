@@ -1,5 +1,5 @@
 import numpy as np
-from Digit_Recognition.text_recog import *
+from Neural_Network.text_recog import *
 
 def pad_image(img, pad_t, pad_r, pad_b, pad_l):
     """Add padding of zeroes to an image.
@@ -56,4 +56,4 @@ def center_image(img):
 # Usage is in a for loop that iterates through 60.000 images.
 
 X_train, y_train = load_data("../data/traindata.mat.tar.gz")
-display_data(center_image(X_train[0].reshape(28, 28)))
+display_data([center_image(X_train[0].reshape(28, 28))])
