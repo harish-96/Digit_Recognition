@@ -95,9 +95,9 @@ def last_line(img):
     m,n = img.shape
     for i in list(reversed(range(m-1))):
         if np.sum(img[i,:])==0 and np.sum(img[i+1,:])!=0:                
-            last_line = img[i+1:,:]
+            lline1 = img[i+1:,:]
             break
-    return last_line
+    return lline1
 def segment_characters(line):
     """Takes a line from a segemented image and returns a list of characters in the line"""
     line = cropimg(line)

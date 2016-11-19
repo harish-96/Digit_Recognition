@@ -55,5 +55,5 @@ def center_image(img):
 
 # Usage is in a for loop that iterates through 60.000 images.
 
-X_train, y_train = load_data("../data/traindata.mat.tar.gz")
-display_data([center_image(X_train[0].reshape(28, 28))])
+#X_train, y_train = load_data("../data/traindata.mat.tar.gz")
+#display_data([center_image(X_train[0].reshape(28, 28))])

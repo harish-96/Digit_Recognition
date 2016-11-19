@@ -264,7 +264,7 @@ def load_data(path):
     """
     if os.path.splitext(path)[1] == '.gz':
         tfile = tarfile.open(path)
-        tfile.extractall("../data/")
+        tfile.extractall("data/")
         tfile.close()
         path = os.path.splitext(os.path.splitext(path)[0])[0]
     data_dict = sio.loadmat(path)
