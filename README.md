@@ -1,24 +1,31 @@
-This project is about developing a program to to recognize text from digital images of handwritten text.
+## Synopsis
 
-The module imgpreprocess.py is used for preprocessing image. 
+At the top of the file there should be a short introduction and/ or overview that explains **what** the project is. This description should match descriptions added for package managers (Gemspec, package.json, etc.)
 
-The module text_recog.py is used for identifying characters from the preprocessed inages of characters
+## Code Example
 
-The rough process is as follows:
+Show what the library does as concisely as possible, developers should be able to figure out **how** your project solves their problem by looking at the code example. Make sure the API you are showing off is obvious, and that your code is short and concise.
 
-1)The image is converted to binary using opencv
+## Motivation
 
-2)Lines are recognized by considering only rows with atleast one non-zero element (1 as data is binary) 
+A short description of the motivation behind the creation and maintenance of the project. This should explain **why** the project exists.
 
-Lets call rows with all elements as zeros as zero-rows and similarly columns , zero-columns.
+## Installation
 
-3)Groups of rows separated by zero-rows are separate lines
+Provide code examples and explanations of how to get the project.
 
-4)In each line characters are separated by zero-columns
+## API Reference
 
-5)The segmentation part is over and now the size of each segment containing a character is adjusted to the size of images of training data.
+Depending on the size of the project, if it is small and simple enough the reference docs can be added to the README. For medium size to larger projects it is important to at least provide a link to where the API reference docs live.
 
-6)Now each segment is fed to the neural network for finding  each character. 
+## Tests
 
-  
+Describe and show how to run the tests with code examples.
 
+## Contributors
+
+Let people know how they can dive into the project, include important links to things like issue trackers, irc, twitter accounts if applicable.
+
+## License
+
+A short snippet describing the license (MIT, Apache, etc.)
