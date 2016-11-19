@@ -1,9 +1,9 @@
 import scipy.io as sio
 from Neural_Network.text_recog import *
 import Image_Processing.imgpreprocess as igp
-import cv2
 import numpy as np
 from Image_Processing.center_image import *
+from PIL import Image
 
 
 dat = sio.loadmat("../data/weights_biases.mat")
@@ -15,7 +15,7 @@ nn = NN_hwr([len(X_train[0]), 15, 10])
 nn.weights = dat['w'][0]
 nn.biases = dat['b'][0]
 
-k = igp.Preprocess("nums.jpg")
+k = igp.Preprocess("im.jpg")
 lines = k.segment_lines()
 chars = []
 for line in lines:
@@ -24,7 +24,9 @@ for line in lines:
 
 for i in chars:
     char028 = np.zeros((28, 28))
-    char0 = cv2.resize(i, (20, 20))
+    image = Image.fromarray(i)
+    # char0 = cv2.resize(i, (20, 20))
+    char0 = np.array(image.resize((20, 20), Image.ANTIALIAS))
     for i in range(20):
         for j in range(20):
             char028[4 + i][4 + j] = char0[i][j]
