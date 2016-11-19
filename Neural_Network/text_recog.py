@@ -32,8 +32,11 @@ def display_data(imgs, nrows=1, ncols=1, nx_pixels=28, ny_pixels=28):
 
     :param int nrows: The number of plots per column. The default value is 1
     :param int ncols: The number of plots per row. The default value is 1
-    :param int nx_pixels: The number of pixels along axis 1. The default value is 28
-    :param int ny_pixels: The number of pixels along axis 2. The default value is 28
+    :param int nx_pixels: The number of pixels along axis 1. The default
+    value is 28
+
+    :param int ny_pixels: The number of pixels along axis 2. The default
+    value is 28
 
     :return: None.\ Displays the Image Data
 
@@ -55,7 +58,8 @@ def display_data(imgs, nrows=1, ncols=1, nx_pixels=28, ny_pixels=28):
 def sigmoid(z):
     """Evaluates the sigmoid function at the given input
 
-    :param array-like z: Could be a number, list or Numpy array for which sigmoid is to be evaluated
+    :param array-like z: Could be a number, list or Numpy array for
+    which sigmoid is to be evaluated
 
     :return: numpy array"""
 
@@ -66,7 +70,8 @@ def sigmoid(z):
 def sigmoid_derivative(z):
     """Evaluates the derivative of the sigmoid function at the given input
 
-    :param array-like z: Could be a number, list or Numpy array for which sigmoid derivative is to be evaluated
+    :param array-like z: Could be a number, list or Numpy array for which
+    sigmoid derivative is to be evaluated
 
     :return: Numpy array"""
 
@@ -79,14 +84,17 @@ class NN_hwr(object):
     that layer
     For the init function, the parameters are
 
-    :param list num_neurons_list: Create a neural network number of neuron per layer given by the list
+    :param list num_neurons_list: Create a neural network number
+    of neuron per layer given by the list
 
     """
 
     def __init__(self, num_neurons_list):
         """Input must be a list of numbers
 
-        :param list num_neurons_list: Create a neural network number of neuron per layer given by the list
+        :param list num_neurons_list: Create a neural network number of
+        neuron per layer given by the list
+
         """
         for i in num_neurons_list:
             if type(i) not in [type(2)]:
@@ -103,8 +111,11 @@ class NN_hwr(object):
         """Computes the activations and weighted inputs of the neurons in
         the network for the given input data.
 
-        :param ndarray x_train: The input for the first layer which needs to be forwards propogated
+        :param ndarray x_train: The input for the first layer which needs
+        to be forwards propogated
+
         :return: A tuple of lists containing activations and weighted inputs
+
         """
 
         activations = []
@@ -124,7 +135,8 @@ class NN_hwr(object):
         the second, an array of length 10 of zeros everywhere except at the
         image label where there is a 1
 
-        :param tuple training_example: Tuple with first element as the input data and the second being its label
+        :param tuple training_example: Tuple with first element as the input
+        data and the second being its label
 
         :return: a tuple of numpy arrays containing the required derivatives"""
 
@@ -222,6 +234,8 @@ class NN_hwr(object):
             for batch in batches:
                 self.train_batch(batch, learning_rate)
             print("epoch no: %d" % i, self.cost_function(X_train, y_train))
+        sio.savemat('../data/weights_biases', {'w': self.weights,
+                    'b': self.biases})
 
     def cost_function(self, X_train, y_train):
         """Computes the quadratic cost function of the Neural Network
@@ -264,7 +278,7 @@ def load_data(path):
     """
     if os.path.splitext(path)[1] == '.gz':
         tfile = tarfile.open(path)
-        tfile.extractall("data/")
+        tfile.extractall("../data/")
         tfile.close()
         path = os.path.splitext(os.path.splitext(path)[0])[0]
     data_dict = sio.loadmat(path)
@@ -272,5 +286,3 @@ def load_data(path):
         return data_dict['X_train'], data_dict['y_train']
     else:
         return data_dict['X_test'], data_dict['y_test']
-
-
