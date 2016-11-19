@@ -16,7 +16,7 @@ def feedImage(image):
     large_window = Image.new("L", (28,28))
     large_window.paste(image, (int(14-x),int(14-y)))
     image_matrix =  standardize_image(large_window, False)/255
-    image_matrix = center_image(image_matrix)
+    #image_matrix = center_image(image_matrix)
     input_vector = np.reshape(image_matrix, (784, 1))
     return input_vector
 
@@ -25,7 +25,7 @@ def gradual_normalization(  image):
     """adjusts sizing and stroke to maintain consistency"""
     while(image.size[0] > 50 and image.size[1] > 50):
         image = image.resize((image.size[0]/2, image.size[1]/2), Image.ANTIALIAS)
-        image =  stroke_normalization(image)
+        #image =  stroke_normalization(image)
     #image_matrix = image/255.0
     image_matrix =  standardize_image(image)/255
     

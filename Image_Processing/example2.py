@@ -1,5 +1,6 @@
 import scipy.io as sio
-from Neural_Network.text_recog import *
+from Neural_Network.neuralnet import *
+from Neural_Network.train_network import *
 import Image_Processing.imgpreprocess as igp
 import numpy as np
 from Image_Processing.center_image import *
