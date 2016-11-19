@@ -38,10 +38,10 @@ def load_data(path):
     labels
 
     :param string path: The path to the file where the training/test data is
-    present
+        present
 
     :return: A dictionary object containing the input data and labels
-    Keys of the dict object -- 'X_train' and 'y_train' or 'X_test' and 'y_test'
+        Keys of the dict object -- 'X_train' and 'y_train' or 'X_test' and 'y_test'
 
     """
     if os.path.splitext(path)[1] == '.gz':
@@ -62,10 +62,10 @@ def display_data(imgs, nrows=1, ncols=1, nx_pixels=28, ny_pixels=28):
     :param int nrows: The number of plots per column. The default value is 1
     :param int ncols: The number of plots per row. The default value is 1
     :param int nx_pixels: The number of pixels along axis 1.
-    The default value is 28
+        The default value is 28
 
     :param int ny_pixels: The number of pixels along axis 2. The default
-    value is 28
+        value is 28
 
     :return: None.\ Displays the Image Data
 

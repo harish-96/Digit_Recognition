@@ -33,7 +33,7 @@ class NN_hwr(object):
     For the init function, the parameters are
 
     :param list num_neurons_list: Create a neural network number
-    of neuron per layer given by the list
+        of neuron per layer given by the list
 
     """
 
@@ -41,7 +41,7 @@ class NN_hwr(object):
         """Input must be a list of numbers
 
         :param list num_neurons_list: Create a neural network number of
-        neuron per layer given by the list
+            neuron per layer given by the list
 
         """
         for i in num_neurons_list:
@@ -60,7 +60,7 @@ class NN_hwr(object):
         the network for the given input data.
 
         :param ndarray x_train: The input for the first layer which needs
-        to be forwards propogated
+            to be forwards propogated
 
         :return: A tuple of lists containing activations and weighted inputs
 
@@ -84,7 +84,7 @@ class NN_hwr(object):
         image label where there is a 1
 
         :param tuple training_example: Tuple with first element as the input
-        data and the second being its label
+            data and the second being its label
 
         :return: a tuple of numpy arrays containing the required derivatives"""
 
@@ -129,10 +129,10 @@ class NN_hwr(object):
         Weights and biases change in the gradient descent algorithm
 
         :param ndarray batch: An array of training examples with each
-        being a tuple containing the input data and its label.
+            being a tuple containing the input data and its label.
 
         :param fload learning_rate: The learning rate which determines
-        the step size in gradient descent
+            the step size in gradient descent
 
         :return: None
 
@@ -157,17 +157,17 @@ class NN_hwr(object):
 
         :param ndarray X_train: Numpy array containing the input training data
         :param ndarray y_train: Numpy array containing the labels for training.
-        Formatted as an array of arrays with 1 at the label position and 0
-        everywhere else
+            Formatted as an array of arrays with 1 at the label position and 0
+            everywhere else
 
         :param int n_epochs: The number of sweeps over the data-set in the
-        Stochastic Gradient Descent
+            Stochastic Gradient Descent
 
         :param int batch_size: Number of training examples per batch in the
-        Stochastic Gradient Descent
+            Stochastic Gradient Descent
 
         :param fload learning_rate: The learning rate which determines the
-        step size in gradient descent
+            step size in gradient descent
 
         :return: None
         """
@@ -217,10 +217,10 @@ class NN_hwr(object):
         the digits.
 
         :param ndarray X_test: Test data in the same format as that for which
-        the network was trained
+            the network was trained
 
         :param ndarray y_test: Labels for the test data. Same format as the
-        labels for training data
+            labels for training data
 
         :return: Float value of the accuracy in percentage
 
