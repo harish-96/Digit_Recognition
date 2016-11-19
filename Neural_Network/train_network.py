@@ -41,7 +41,8 @@ def load_data(path):
         present
 
     :return: A dictionary object containing the input data and labels
-        Keys of the dict object -- 'X_train' and 'y_train' or 'X_test' and 'y_test'
+        Keys of the dict object -- 'X_train' and 'y_train' or 'X_test'
+        and 'y_test'
 
     """
     if os.path.splitext(path)[1] == '.gz':

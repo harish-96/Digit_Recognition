@@ -4,11 +4,14 @@ import numpy as np
 def add_padding(img, pad_t, pad_r, pad_b, pad_l):
     """Add padding of zeroes to an image.
     Add padding to an array image.
-    :param img:
-    :param pad_t:
-    :param pad_r:
-    :param pad_b:
-    :param pad_l:
+    :param ndarray img: Numpy array of input image which needs to be padded by
+        zeros
+    :param int pad_t: Number of pixels of paddding on top of the image
+    :param int pad_r: Number of pixels of paddding beneath of the image
+    :param int pad_b: Number of pixels of paddding to the right of the image
+    :param int pad_l: Number of pixels of paddding to the left of the image
+
+    :return: Numpy array of padded image
     """
     height, width = img.shape
 
@@ -33,7 +36,10 @@ def add_padding(img, pad_t, pad_r, pad_b, pad_l):
 
 def center_image(img):
     """Return a centered image.
-    :param img:
+
+    :param ndarray img: Numpy array of input image which needs to be centered
+
+    :return: Centered image's Numpy array
     """
     col_sum = np.where(np.sum(img, axis=0) > 0)
     row_sum = np.where(np.sum(img, axis=1) > 0)

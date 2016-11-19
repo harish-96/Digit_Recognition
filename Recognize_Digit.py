@@ -34,7 +34,6 @@ for line in lines:
     numbers = "Line no: " + str(n) + " : "
     for char in igp.segment_characters(line):
         chars.append(char)
-        import pdb;pdb.set_trace()
         char028 = np.zeros((28, 28))
         image = Image.fromarray(char)
         char0 = np.array(image.resize((20, 20), Image.ANTIALIAS))

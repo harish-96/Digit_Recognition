@@ -7,7 +7,7 @@ def sigmoid(z):
     """Evaluates the sigmoid function at the given input
 
     :param array-like z: Could be a number, list or Numpy array for
-    which sigmoid is to be evaluated
+        which sigmoid is to be evaluated
 
     :return: numpy array"""
 
@@ -19,7 +19,7 @@ def sigmoid_derivative(z):
     """Evaluates the derivative of the sigmoid function at the given input
 
     :param array-like z: Could be a number, list or Numpy array for which
-    sigmoid derivative is to be evaluated
+        sigmoid derivative is to be evaluated
 
     :return: Numpy array"""
 
@@ -131,7 +131,7 @@ class NN_hwr(object):
         :param ndarray batch: An array of training examples with each
             being a tuple containing the input data and its label.
 
-        :param fload learning_rate: The learning rate which determines
+        :param float learning_rate: The learning rate which determines
             the step size in gradient descent
 
         :return: None
