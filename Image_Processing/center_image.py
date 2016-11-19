@@ -1,10 +1,18 @@
+"""
+Center images
+~~~~~~~~~~~~~~~~
+A module to crop and center images. This is a necessary preprocessing step for
+the input data to resemble training data.
+"""
+
+
 import numpy as np
 
 
 def add_padding(img, pad_t, pad_r, pad_b, pad_l):
     """Add padding of zeroes to an image.
     Add padding to an array image.
-    
+
     :param ndarray img: Numpy array of input image which needs to be padded by
         zeros
     :param int pad_t: Number of pixels of paddding on top of the image

@@ -1,19 +1,29 @@
 ## Synopsis
 
 Given an image containing handwritten numbers, this package segments the image and identifies each digit present in the image.
-Shortly, a handwritten digit recognizing software(a very crude one though).
+Shortly, a handwritten digit recognizing software(a very crude one though). The underlying neural network can be retrained to meet specific needs
 
 ## Code Example
 
-Show what the library does as concisely as possible, developers should be able to figure out **how** your project solves their problem by looking at the code example. Make sure the API you are showing off is obvious, and that your code is short and concise.
+To train a Neural Network, use the following code snippet::
+    from neuralnet import NN_hwr
+    nn = NN_hwr([list containing number of neurons per layer])
+    nn.train_nn(Input training data, label_data, Number of iterations,
+                Number of examples per batch, learning_rate)
+Once trained, it can be used to classify data from the command line as::
+    python Recognize_Digit.py path/to/image path/to/output/file (optional)
+    
 
 ## Motivation
 
-This project has started as part of course on Python. We(Harish and Surya) formed a team and started thinking of ideas then we thought of handwritten digit recognition software using neural networks
+This project has started as part of course on Python. We(Harish and Surya) formed a team and started thinking of ideas then we thought of handwritten digit recognition software using neural networks.
+
+Recognising text has multiple applications including but not limited to Number Plate Recognition, Medical applications - scanning and documenting prescriptions, evaluating examinations etc.
 
 ## Installation
 
-Provide code examples and explanations of how to get the project.
+Install all the pre-requisites and run::
+    python setup.py install
 
 ## API Reference
 

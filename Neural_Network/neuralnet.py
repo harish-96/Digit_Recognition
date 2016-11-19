@@ -1,3 +1,15 @@
+"""
+Neural Network
+~~~~~~~~~~~~~~~~
+A module to train a neural network with an arbitrary number of layers and
+and arbitrary number of neurons per layer. Use as::
+    from neuralnet import NN_hwr
+    nn = NN_hwr([list containing number of neurons per layer])
+    nn.train_nn(Input training data, label_data, Number of iterations,
+                Number of examples per batch, learning_rate)
+"""
+
+
 import numpy as np
 import random
 import scipy.io as sio
@@ -27,7 +39,7 @@ def sigmoid_derivative(z):
 
 
 class NN_hwr(object):
-    """A template class for a neural network to recognise handwritten text
+    """A template class for a generic neural network.
     Initialise with a list with each element being the number of neurons in
     that layer
     For the init function, the parameters are

@@ -1,3 +1,10 @@
+"""
+Useful functionality for training Neural Network
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Functions to unpack the data from the MNIST database, uncompress the data and display it
+"""
+
+
 from Neural_Network import neuralnet as nln
 import numpy as np
 import scipy.io as sio
