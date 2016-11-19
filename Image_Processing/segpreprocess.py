@@ -15,7 +15,7 @@ def feedImage(  image):
     large_window = Image.new("L", (28,28))
     large_window.paste(image, (int(14-x),int(14-y)))
     image_matrix =  standardize_image(large_window, False)/255
-    print image_matrix
+    #print image_matrix
     input_vector = np.reshape(image_matrix, (784, 1))
     return input_vector
 
@@ -31,7 +31,7 @@ def gradual_normalization(  image):
     #stores indices of non-zero numbers
     non_zeros = argwhere(image_matrix)
     (ystart, xstart), (ystop, xstop) = non_zeros.min(0), non_zeros.max(0) + 1
-    print xstart, xstop
+    #print xstart, xstop
     #prevents stretching the number one to a square 
     if(xstop - xstart > 8):
         image_matrix = image_matrix[ystart:ystop, 0:image.size[0]]
@@ -57,7 +57,7 @@ def stroke_normalization(  image):
         else:
             image_matrix = ndimage.morphology.binary_dilation(image_matrix)
             thickness =  stroke_thickness(Image.fromarray(np.int8(image_matrix)))
-    print thickness
+    #print thickness
     image_matrix = ndimage.morphology.binary_closing(image_matrix)
     transformed_image = ImageOps.invert(Image.fromarray(np.int8(image_matrix*255)).convert('L'))
     return transformed_image
