@@ -1,5 +1,6 @@
 import random
 from Neural_Network import text_recog
+from center_image import *
 # Third-party libraries
 import numpy as np
 from numpy import array, argwhere
@@ -7,21 +8,21 @@ from PIL import Image
 from PIL import ImageOps
 from scipy import ndimage
 from skimage.morphology import erosion, dilation
-def feedImage(  image):
+def feedImage(image):
     '''takes an image and attempts to predict the number present using
-        a neural network and pre-processing methods'''
+        a neural network and pre-processing methods :param PIL.Image.Image image : is the input and output is a numpy array'''
     image =  gradual_normalization(image)
     (x, y) = ndimage.measurements.center_of_mass(np.array(image))
     large_window = Image.new("L", (28,28))
     large_window.paste(image, (int(14-x),int(14-y)))
     image_matrix =  standardize_image(large_window, False)/255
-    print image_matrix
+    image_matrix = center_image(image_matrix)
     input_vector = np.reshape(image_matrix, (784, 1))
     return input_vector
 
 
 def gradual_normalization(  image):
-    #adjusts sizing and stroke to maintain consistency
+    """adjusts sizing and stroke to maintain consistency"""
     while(image.size[0] > 50 and image.size[1] > 50):
         image = image.resize((image.size[0]/2, image.size[1]/2), Image.ANTIALIAS)
         image =  stroke_normalization(image)
@@ -31,7 +32,6 @@ def gradual_normalization(  image):
     #stores indices of non-zero numbers
     non_zeros = argwhere(image_matrix)
     (ystart, xstart), (ystop, xstop) = non_zeros.min(0), non_zeros.max(0) + 1
-    print xstart, xstop
     #prevents stretching the number one to a square 
     if(xstop - xstart > 8):
         image_matrix = image_matrix[ystart:ystop, 0:image.size[0]]
@@ -57,7 +57,6 @@ def stroke_normalization(  image):
         else:
             image_matrix = ndimage.morphology.binary_dilation(image_matrix)
             thickness =  stroke_thickness(Image.fromarray(np.int8(image_matrix)))
-    print thickness
     image_matrix = ndimage.morphology.binary_closing(image_matrix)
     transformed_image = ImageOps.invert(Image.fromarray(np.int8(image_matrix*255)).convert('L'))
     return transformed_image
