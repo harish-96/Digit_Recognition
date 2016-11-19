@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from Neural_Network.text_recog import *
+from Neural_Network.neuralnet import *
+from Neural_Network.train_network import *
 
 
 def add_padding(img, pad_t, pad_r, pad_b, pad_l):
@@ -37,16 +38,12 @@ def center_image(img):
     """Return a centered image.
     :param img:
     """
-    # plt.imshow(img)
-    # plt.show()
     col_sum = np.where(np.sum(img, axis=0) > 0)
     row_sum = np.where(np.sum(img, axis=1) > 0)
     y1, y2 = row_sum[0][0], row_sum[0][-1]
     x1, x2 = col_sum[0][0], col_sum[0][-1]
 
     cropped_image = img[y1 - 1:y2 + 1, x1 - 1:x2 + 1]
-    # cropped_image = img[y1:y2, x1:x2]
-    # plt.imshow(cropped_image); plt.show()
     zero_axis_fill = (27 - cropped_image.shape[0])
     one_axis_fill = (27 - cropped_image.shape[1])
 
@@ -58,20 +55,3 @@ def center_image(img):
                                int(right), int(bottom), int(left))
 
     return padded_image
-
-
-X_train, y_train = load_data("../data/traindata.mat.tar.gz")
-a = X_train[59].reshape((28, 28))
-col_sum = np.where(np.sum(a, axis=0) > 0)
-row_sum = np.where(np.sum(a, axis=1) > 0)
-y1, y2 = row_sum[0][0], row_sum[0][-1]
-x1, x2 = col_sum[0][0], col_sum[0][-1]
-print(x1, y1)
-print(x2, y2)
-
-cropped_image = a[y1:y2, x1:x2]
-padded_image = add_padding(cropped_image, 20, 20, 20, 20)
-padded_image = center_image(a)
-print(padded_image.shape)
-plt.imshow(padded_image)
-plt.show()
