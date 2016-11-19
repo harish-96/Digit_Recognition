@@ -5,14 +5,17 @@ Shortly, a handwritten digit recognizing software(a very crude one though). The 
 
 ## Code Example
 
-To train a Neural Network, use the following code snippet::
+To train a Neural Network, use the following code snippet
+~~~~~~~~~~
 	from neuralnet import NN_hwr
 	nn = NN_hwr([list containing number of neurons per layer])
 	nn.train_nn(Input training data, label_data, Number of iterations,
 	            Number of examples per batch, learning_rate)
+~~~~~~~~~~
 Once trained, it can be used to classify data from the command line as::
+~~~~~~~~~~
     python Recognize_Digit.py path/to/image path/to/output/file (optional)
-    
+~~~~~~~~~~
 
 ## Motivation
 
