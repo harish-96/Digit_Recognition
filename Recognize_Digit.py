@@ -2,12 +2,9 @@ from Neural_Network.neuralnet import NN_hwr
 from Neural_Network.train_network import load_data
 import Image_Processing.imgpreprocess as igp
 from Image_Processing.center_image import *
-<<<<<<< HEAD
 import scipy.io as sio
 import numpy as np
-=======
 import matplotlib.pyplot as plt
->>>>>>> 04de421c9a24756dd3451297827efc7e51e6b303
 from PIL import Image
 import os
 import sys
