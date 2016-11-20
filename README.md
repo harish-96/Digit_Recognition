@@ -41,9 +41,11 @@ Describe and show how to run the tests with code examples.
 Let people know how they can dive into the project, include important links to things like issue trackers, irc, twitter accounts if applicable.
 
 Harish Murali
+
 emailid: harish2111996@gmail.com
 
 Surya Mohan
+
 emailid: suryamohan1919@gmail.com, suryamohan@iitb.ac.in
 
 ## License
