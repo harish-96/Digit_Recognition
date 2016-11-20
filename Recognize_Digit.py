@@ -1,9 +1,9 @@
-import scipy.io as sio
 from Neural_Network.neuralnet import NN_hwr
 from Neural_Network.train_network import load_data
 import Image_Processing.imgpreprocess as igp
-import numpy as np
 from Image_Processing.center_image import *
+import scipy.io as sio
+import numpy as np
 from PIL import Image
 import os
 import sys

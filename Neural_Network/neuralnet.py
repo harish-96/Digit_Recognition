@@ -243,5 +243,5 @@ class NN_hwr(object):
             if np.argmax(out) == np.where(y_test[i])[0][0]:
                 accuracy += 1
 
-        accuracy = accuracy / len(X_test) * 100
+        accuracy = accuracy / len(X_test) * 100.0
         return accuracy

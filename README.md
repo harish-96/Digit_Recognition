@@ -5,17 +5,14 @@ Shortly, a handwritten digit recognizing software(a very crude one though). The 
 
 ## Code Example
 
-To train a Neural Network, use the following code snippet
-~~~~~~~~~~python
-	from neuralnet import NN_hwr
-	nn = NN_hwr([list containing number of neurons per layer])
-	nn.train_nn(Input training data, label_data, Number of iterations,
-	            Number of examples per batch, learning_rate)
-~~~~~~~~~~
+To train a Neural Network, use the following code snippet::
+    from neuralnet import NN_hwr
+    nn = NN_hwr([list containing number of neurons per layer])
+    nn.train_nn(Input training data, label_data, Number of iterations,
+                Number of examples per batch, learning_rate)
 Once trained, it can be used to classify data from the command line as::
-~~~~~~~~~~bash
     python Recognize_Digit.py path/to/image path/to/output/file (optional)
-~~~~~~~~~~
+    
 
 ## Motivation
 
@@ -39,13 +36,10 @@ Describe and show how to run the tests with code examples.
 ## Contributors
 
 Let people know how they can dive into the project, include important links to things like issue trackers, irc, twitter accounts if applicable.
-
-Harish Murali
-
+Harish Murali,
 emailid: harish2111996@gmail.com
 
 Surya Mohan
-
 emailid: suryamohan1919@gmail.com, suryamohan@iitb.ac.in
 
 ## License
