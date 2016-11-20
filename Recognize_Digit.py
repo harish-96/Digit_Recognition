@@ -4,6 +4,7 @@ from Neural_Network.train_network import load_data
 import Image_Processing.imgpreprocess as igp
 import numpy as np
 from Image_Processing.center_image import *
+import matplotlib.pyplot as plt
 from PIL import Image
 import os
 import sys
