@@ -94,12 +94,10 @@ def display_data(imgs, nrows=1, ncols=1, nx_pixels=28, ny_pixels=28):
 
 
 if __name__ == '__main__':
-    pathtrain = sys.argv[0]
-    pathtrain = os.path.abspath(pathtrain)
-    X_train, y_train = load_data(pathtrain[:-16]+"../data/traindata.mat.tar.gz")
-    X_test, y_test = load_data(pathtrain[:-16]+"../data/testdata.mat.tar.gz")
+    X_train, y_train = load_data("../data/traindata.mat.tar.gz")
+    X_test, y_test = load_data("../data/testdata.mat.tar.gz")
     nn = nln.NN_hwr([len(X_train[0]), 15, 10])
-    nn.train_nn(pathtrain[:-16],X_train, y_train, 10, 20, 0.06)
+    nn.train_nn(X_train, y_train, 10, 20, 0.06)
     accuracy = 0
     for i in range(len(X_test[:100])):
             out = nn.forward_prop(X_test[i])[0][-1]
@@ -107,4 +105,4 @@ if __name__ == '__main__':
                 accuracy += 1
 
     print("Accuracy of prediction: ", accuracy)
-    sio.savemat(pathtrain[:-16]+"../data/weights_biases", {'w': nn.weights, 'b': nn.biases})
+    sio.savemat("../data/weights_biases", {'w': nn.weights, 'b': nn.biases})

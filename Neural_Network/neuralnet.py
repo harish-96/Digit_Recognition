@@ -159,7 +159,7 @@ class NN_hwr(object):
         self.biases = self.biases - learning_rate * delta_b_sum
         self.weights = self.weights - learning_rate * delta_w_sum
 
-    def train_nn(self, pathtrain, X_train, y_train, n_epochs, batch_size, learning_rate):
+    def train_nn(self, X_train, y_train, n_epochs, batch_size, learning_rate):
         """Trains the neural network with the test data. n_epochs is the number
         sweeps over the whole data. batch_size is the number of training
         example per batch in the stochastic gradient descent. X_train and
@@ -194,7 +194,7 @@ class NN_hwr(object):
             for batch in batches:
                 self.train_batch(batch, learning_rate)
             print("epoch no: %d" % i, self.cost_function(X_train, y_train))
-        sio.savemat(pathtrain +'../data/weights_biases', {'w': self.weights,
+        sio.savemat('../data/weights_biases', {'w': self.weights,
                     'b': self.biases})
 
     def cost_function(self, X_train, y_train):
@@ -223,6 +223,3 @@ class NN_hwr(object):
 
         """
         return np.array(activation) - y
-
-
-        return accuracy
