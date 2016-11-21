@@ -37,12 +37,10 @@ Install all the pre-requisites and run::
 ## Contributors
 
 Let people know how they can dive into the project, include important links to things like issue trackers, irc, twitter accounts if applicable.
-Harish Murali,
-emailid: harish2111996@gmail.com
 
-Surya Mohan
-emailid: suryamohan1919@gmail.com, suryamohan@iitb.ac.in
+Harish Murali, 
+email-id: harish2111996@gmail.com
 
-## License
+Surya Mohan, 
+email-id: suryamohan1919@gmail.com, suryamohan@iitb.ac.in
 
-A short snippet describing the license (MIT, Apache, etc.)
