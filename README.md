@@ -8,16 +8,16 @@ To access the documentation in Github Pages, [Click here](https://harish-96.gith
 
 ## Code Example
 
-To train the Neural Network, use 
+To train the Neural Network, use::
     python path/to/train_network.py 
 
-If you are in the project directory use
+If you are in the project directory use::
     python Neural_Network/train_network.py
 
-To recognize digits from image use as :
+To recognize digits from image use as::
     python path/to/Recognize_Digit.py path/to/image path/to/outputfile
 
-If you are in project directory and to test on the default test image use as:
+If you are in project directory and to test on the default test image use as::
     python Recognize_Digit.py testimage.jpg output.txt
 You can find the result in output.txt
 
