@@ -55,19 +55,19 @@ class Test_Preprocess(unittest.TestCase):
                 in_image[i, j] = 0
         return in_image
 
-    @mock.patch('Image_Processing.imgpreprocess.os.path')
-    @mock.patch('Image_Processing.imgpreprocess.cv2.imread', return_value=np.floor(255 * np.random.rand(200, 200)))
-    def test_mocked_image_is_segmented_correctly(self, mock_cv, mock_path):
-        """"""
-        mock_path.isfile.return_value = True
-        self.PP1 = Preprocess("img.png")
-        print(self.PP1.image)
-        print(self.PP.image)
-        for i in range(0, 200, 5):
-            for j in range(0, 200, 5):
-                self.PP1.image[i, j] = 0
-        lines = self.PP1.segment_lines()
-        print(len(lines))
+    # @mock.patch('Image_Processing.imgpreprocess.os.path')
+    # @mock.patch('Image_Processing.imgpreprocess.cv2.imread', return_value=np.floor(255 * np.random.rand(200, 200)))
+    # def test_mocked_image_is_segmented_correctly(self, mock_cv, mock_path):
+    #     """"""
+    #     mock_path.isfile.return_value = True
+    #     self.PP1 = Preprocess("img.png")
+    #     print(self.PP1.image)
+    #     print(self.PP.image)
+    #     for i in range(0, 200, 5):
+    #         for j in range(0, 200, 5):
+    #             self.PP1.image[i, j] = 0
+    #     lines = self.PP1.segment_lines()
+    #     print(len(lines))
 
     def tearDown(self):
         del self.PP
