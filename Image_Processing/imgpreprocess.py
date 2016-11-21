@@ -2,7 +2,7 @@
 imgpreprocess.py
 ~~~~~~~~~~~~~~~~
 A module to preprocess and segement an image containing digits in several lines
-into lines and further into separate digits. These segmented images of digits 
+into lines and further into separate digits. These segmented images of digits
 are then fed to neural networks for recognition.
 """
 
@@ -31,7 +31,7 @@ class Preprocess(object):
     def segment_lines(self):
         """The image containing text is segmented into lines and returns
         a list of the lines
-        
+
         :return: List of arrays, each array is a line from image
 
         """
@@ -115,7 +115,7 @@ def cropimg(image):
 def last_line(img):
     """Takes cropped binary image as input and gives the segment
     of image containing last line of text
-    
+
     :param array img:
 
     """
@@ -128,9 +128,9 @@ def last_line(img):
 
 
 def segment_characters(line):
-    """Takes a line from a segemented image and returns a list of 
+    """Takes a line from a segemented image and returns a list of
     characters in the line.
-    
+
     :param array line:
 
     """
@@ -155,7 +155,7 @@ def segment_characters(line):
 def last_char(img):
     """Takes a line from a segemented image and returns last
     character in the line
-    
+
     :param array img:
 
     """

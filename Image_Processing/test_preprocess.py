@@ -1,7 +1,6 @@
 import unittest
 from imgpreprocess import *
 import numpy
-import mock
 
 
 class Test_Preprocess(unittest.TestCase):
@@ -56,7 +55,8 @@ class Test_Preprocess(unittest.TestCase):
         return in_image
 
     # @mock.patch('Image_Processing.imgpreprocess.os.path')
-    # @mock.patch('Image_Processing.imgpreprocess.cv2.imread', return_value=np.floor(255 * np.random.rand(200, 200)))
+    # @mock.patch('Image_Processing.imgpreprocess.cv2.imread',
+                # return_value=np.floor(255 * np.random.rand(200, 200)))
     # def test_mocked_image_is_segmented_correctly(self, mock_cv, mock_path):
     #     """"""
     #     mock_path.isfile.return_value = True

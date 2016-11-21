@@ -30,6 +30,7 @@ The pre-requisites for this software are
 2. Scipy
 3. PIL
 4. OpenCV
+5. Matplotlib
 
 Install all the pre-requisites and run::
     python setup.py install
