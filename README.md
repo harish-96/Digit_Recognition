@@ -23,10 +23,10 @@ This project has started as part of course on Software Development.
 
 The pre-requisites for this software are
 
-#. Numpy
-#. Scipy
-#. PIL
-#. OpenCV
+1. Numpy
+2. Scipy
+3. PIL
+4. OpenCV
 
 Install all the pre-requisites and run::
     python setup.py install
