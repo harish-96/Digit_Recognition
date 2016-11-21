@@ -19,6 +19,7 @@ To recognize digits from image use as::
 
 If you are in project directory and to test on the default test image use as::
     python Recognize_Digit.py testimage.jpg output.txt
+
 You can find the result in output.txt
 
 ## Motivation
