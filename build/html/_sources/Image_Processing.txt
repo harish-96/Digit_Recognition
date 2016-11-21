@@ -1,0 +1,31 @@
+Image_Processing package
+========================
+
+Submodules
+----------
+
+Image_Processing.center_image module
+------------------------------------
+
+.. automodule:: Image_Processing.center_image
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Image_Processing.imgpreprocess module
+-------------------------------------
+
+.. automodule:: Image_Processing.imgpreprocess
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+
+Module contents
+---------------
+
+.. automodule:: Image_Processing
+    :members:
+    :undoc-members:
+    :show-inheritance:

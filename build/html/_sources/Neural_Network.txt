@@ -1,0 +1,30 @@
+Neural_Network package
+======================
+
+Submodules
+----------
+
+Neural_Network.neuralnet module
+-------------------------------
+
+.. automodule:: Neural_Network.neuralnet
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Neural_Network.train_network module
+-----------------------------------
+
+.. automodule:: Neural_Network.train_network
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: Neural_Network
+    :members:
+    :undoc-members:
+    :show-inheritance:
