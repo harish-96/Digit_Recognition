@@ -95,7 +95,7 @@ def display_data(imgs, nrows=1, ncols=1, nx_pixels=28, ny_pixels=28):
 if __name__ == '__main__':
     X_train, y_train = load_data("../data/traindata.mat.tar.gz")
     X_test, y_test = load_data("../data/testdata.mat.tar.gz")
-    nn = nln.NN_hwr([len(X_train[0]), 20, 40, 20, 10])
+    nn = nln.NN_hwr([len(X_train[0]), 15, 10])
     nn.train_nn(X_train, y_train, 10, 20, 0.06)
 
     print("Accuracy of prediction: ", nn.accuracy(X_test, y_test))

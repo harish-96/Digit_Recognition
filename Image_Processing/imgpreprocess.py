@@ -89,7 +89,7 @@ def binaryimg(image):
 
 def cropimg(image):
     """Crops a binary image tightly
-    
+
     :param array image:
 
     """

@@ -16,22 +16,20 @@ Once trained, it can be used to classify data from the command line as::
 
 ## Motivation
 
-This project has started as part of course on Python. We(Harish and Surya) formed a team and started thinking of ideas then we thought of handwritten digit recognition software using neural networks.
-
 Recognising text has multiple applications including but not limited to Number Plate Recognition, Medical applications - scanning and documenting prescriptions, evaluating examinations etc.
 
+This project has started as part of course on Software Development.
 ## Installation
+
+The pre-requisites for this software are
+
+#. Numpy
+#. Scipy
+#. PIL
+#. OpenCV
 
 Install all the pre-requisites and run::
     python setup.py install
-
-## API Reference
-
-Depending on the size of the project, if it is small and simple enough the reference docs can be added to the README. For medium size to larger projects it is important to at least provide a link to where the API reference docs live.
-
-## Tests
-
-Describe and show how to run the tests with code examples.
 
 ## Contributors
 
