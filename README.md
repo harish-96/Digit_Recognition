@@ -8,17 +8,18 @@ To access the documentation in Github Pages, [Click here](https://harish-96.gith
 
 ## Code Example
 
-To train a Neural Network, use the following code snippet
-```python
-from neuralnet import NN_hwr
-nn = NN_hwr([list containing number of neurons per layer])
-nn.train_nn(Input training data, label_data, Number of iterations,
-                Number of examples per batch, learning_rate)
-```
-Once trained, it can be used to classify data from the command line as
-```
-python Recognize_Digit.py path/to/image path/to/output/file (optional)
-```
+To train the Neural Network, use 
+    python path/to/train_network.py 
+
+If you are in the project directory use
+    python Neural_Network/train_network.py
+
+To recognize digits from image use as :
+    python path/to/Recognize_Digit.py path/to/image path/to/outputfile
+
+If you are in project directory and to test on the default test image use as:
+    python Recognize_Digit.py testimage.jpg output.txt
+You can find the result in output.txt
 
 ## Motivation
 
