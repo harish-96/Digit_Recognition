@@ -1,5 +1,5 @@
 import unittest
-from Image_Processing.imgpreprocess import *
+from imgpreprocess import *
 import numpy
 import mock
 
