@@ -4,7 +4,7 @@ Given an image containing handwritten numbers, this package segments the image a
 Shortly, a handwritten digit recognizing software(a very crude one though). The underlying neural network can be retrained to meet specific needs
 ##Documentation
 
-[Click here] to access the documentation in Github Pages(https://harish-96.github.io/Digit_Recognition/)
+To access the documentation in Github Pages, [Click here](https://harish-96.github.io/Digit_Recognition/)
 
 ## Code Example
 
