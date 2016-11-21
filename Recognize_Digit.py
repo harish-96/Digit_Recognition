@@ -9,10 +9,12 @@ from PIL import Image
 import os
 import sys
 
-
-dat = sio.loadmat("data/weights_biases.mat")
-X_train, y_train = load_data("data/traindata.mat.tar.gz")
-X_test, y_test = load_data("data/testdata.mat.tar.gz")
+pathrecog = sys.argv[0]
+pathrecog = os.path.abspath(pathrecog)
+pathrecog = pathrecog[:-18]
+dat = sio.loadmat(pathrecog+"data/weights_biases.mat")
+X_train, y_train = load_data(pathrecog+"data/traindata.mat.tar.gz")
+X_test, y_test = load_data(pathrecog+"data/testdata.mat.tar.gz")
 
 nn = NN_hwr([len(X_train[0]), 15, 10])
 nn.weights = dat['w'][0]
