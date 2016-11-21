@@ -224,24 +224,5 @@ class NN_hwr(object):
         """
         return np.array(activation) - y
 
-    def accuracy(self, X_test, y_test):
-        """Computes the accuracy with which the Network, once trained classifies
-        the digits.
 
-        :param ndarray X_test: Test data in the same format as that for which
-            the network was trained
-
-        :param ndarray y_test: Labels for the test data. Same format as the
-            labels for training data
-
-        :return: Float value of the accuracy in percentage
-
-        """
-        accuracy = 0
-        for i in range(len(X_test)):
-            out = self.forward_prop(X_test[i])[0][-1]
-            if np.argmax(out) == np.where(y_test[i])[0][0]:
-                accuracy += 1
-
-        accuracy = accuracy / len(X_test) * 100.0
         return accuracy

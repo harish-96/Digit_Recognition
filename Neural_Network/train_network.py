@@ -97,6 +97,11 @@ if __name__ == '__main__':
     X_test, y_test = load_data("../data/testdata.mat.tar.gz")
     nn = nln.NN_hwr([len(X_train[0]), 15, 10])
     nn.train_nn(X_train, y_train, 10, 20, 0.06)
+    accuracy = 0
+    for i in range(len(X_test[:100])):
+            out = nn.forward_prop(X_test[i])[0][-1]
+            if np.argmax(out) == np.where(y_test[i])[0][0]:
+                accuracy += 1
 
-    print("Accuracy of prediction: ", nn.accuracy(X_test, y_test))
+    print("Accuracy of prediction: ", accuracy)
     sio.savemat("../data/weights_biases", {'w': nn.weights, 'b': nn.biases})
