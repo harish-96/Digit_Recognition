@@ -67,7 +67,7 @@ def binaryimg(image):
     """Converts grayscale image to binary image , it gives 1 for black and zero
     for white.
 
-    :param array image : represents the image to be converted to binary
+    :param array image: represents the image to be converted to binary
 
     """
     blur_image = cv2.GaussianBlur(image, (5, 5), 0)

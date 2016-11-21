@@ -12,7 +12,7 @@ setup(name='Digit_Recognition',
       install_requires=[
             "numpy",
             "scipy",
-            "PIL",
-            "cv2",
+            "Pillow",
+            # "opencv",
             "matplotlib"],
      )
