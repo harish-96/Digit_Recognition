@@ -7,8 +7,10 @@ are then fed to neural networks for recognition.
 """
 
 import numpy as np
+import matplotlib.pyplot as plt
 import os
 import cv2
+import Image_Processing.center_image as c_img
 
 
 class Preprocess(object):
@@ -38,6 +40,7 @@ class Preprocess(object):
         cropped_image = cropimg(binaryimg(self.image))
         lines = []
         limg = cropped_image.copy()
+        print("yabadabadoo")
         last_lin = last_line(limg)
         while not np.sum(limg) == np.sum(last_lin):
             m, n = limg.shape
@@ -47,6 +50,7 @@ class Preprocess(object):
                     lines.append(limg[:i, :])
                     p = i
                     break
+            # lines.append(last_line(limg))
             limg = limg[p:, :]
             limg = cropimg(limg)
         lines.append(last_lin)
@@ -70,21 +74,23 @@ def binaryimg(image):
     :param array image: represents the image to be converted to binary
 
     """
-    blur_image = cv2.GaussianBlur(image, (5, 5), 0)
-    thresh = np.mean(image)
-    retval, binary_image = cv2.threshold(blur_image, thresh, 255,
-                                         cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    blur_image = cv2.GaussianBlur(image, (7, 7), 0)
+    binary_image = cv2.adaptiveThreshold(blur_image, 1,
+                                         cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 7, 5) #+ cv2.THRESH_OTSU)
     m, n = binary_image.shape
     binary_image = np.asmatrix(binary_image)
-    for i in range(n):
-        for j in range(m):
-            if binary_image[j, i] == 0:
-                binary_image[j, i] = 1
-    for i in range(n):
-        for j in range(m):
-            if binary_image[j, i] == 255:
-                binary_image[j, i] = 0
-    return binary_image
+    blurred_bin = cv2.GaussianBlur(binary_image, (7, 7), 0)
+    plt.imshow(blurred_bin)
+    plt.show()
+    # for i in range(n):
+    #     for j in range(m):
+    #         if binary_image[j, i] == 0:
+    #             binary_image[j, i] = 1
+    # for i in range(n):
+    #     for j in range(m):
+    #         if binary_image[j, i] == 255:
+    #             binary_image[j, i] = 0
+    return blurred_bin
 
 
 def cropimg(image):
@@ -143,7 +149,21 @@ def segment_characters(line):
         p = 0
         for i in range(1, n):
             if np.sum(cimg[:, i]) == 0 and np.sum(cimg[:, i - 1]) != 0:
-                chars.append(cimg[:, :i])
+                char_temp = cimg[:, :i]
+                h, w = char_temp.shape
+                if h > w:
+                    pad_t = 0
+                    pad_b = 0
+                    pad_l = int((h - w) / 2)
+                    pad_r = int((h - w) / 2)
+                if h < w:
+                    pad_r = 0
+                    pad_l = 0
+                    pad_t = int((w - h) / 2)
+                    pad_b = int((w - h) / 2)
+
+                char_temp = c_img.add_padding(char_temp, pad_t, pad_r, pad_b, pad_l)
+                chars.append(char_temp)
                 p = i
                 break
         cimg = cimg[:, p:]

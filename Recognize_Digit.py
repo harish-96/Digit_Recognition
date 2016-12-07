@@ -12,9 +12,9 @@ import sys
 pathrecog = sys.argv[0]
 pathrecog = os.path.abspath(pathrecog)
 pathrecog = pathrecog[:-18]
-dat = sio.loadmat(pathrecog+"data/weights_biases.mat")
-X_train, y_train = load_data(pathrecog+"data/traindata.mat.tar.gz")
-X_test, y_test = load_data(pathrecog+"data/testdata.mat.tar.gz")
+dat = sio.loadmat(pathrecog + "data/weights_biases.mat")
+X_train, y_train = load_data(pathrecog + "data/traindata.mat.tar.gz")
+X_test, y_test = load_data(pathrecog + "data/testdata.mat.tar.gz")
 
 nn = NN_hwr([len(X_train[0]), 15, 10])
 nn.weights = dat['w'][0]
@@ -37,9 +37,14 @@ for line in lines:
     numbers = "Line no: " + str(n) + " : "
     for char in igp.segment_characters(line):
         chars.append(char)
+        plt.imshow(char)
+        plt.show()
         char028 = np.zeros((28, 28))
         image = Image.fromarray(char)
-        char0 = np.array(image.resize((20, 20), Image.ANTIALIAS))
+        # char0 = np.array(image.resize((20, 20), Image.ANTIALIAS))
+        char0 = np.array(image.resize((20, 20)))
+        # plt.imshow(char0)
+        # plt.show()
         for i in range(20):
             for j in range(20):
                 char028[4 + i][4 + j] = char0[i][j]

@@ -38,6 +38,19 @@ def sigmoid_derivative(z):
     return sigmoid(z) * (1 - sigmoid(z))
 
 
+def relu(z):
+    np.maximum(np.zeros_like(z), z)
+
+
+def relu_derivative(z):
+    np.greater(z, np.zeros_like(z))
+
+
+activation_func = {'sigmoid': sigmoid, 'relu': relu}
+activation_func_derivative = {'sigmoid': sigmoid_derivative,
+                              'relu': relu_derivative}
+
+
 class NN_hwr(object):
     """A template class for a generic neural network.
     Initialise with a list with each element being the number of neurons in
@@ -49,7 +62,7 @@ class NN_hwr(object):
 
     """
 
-    def __init__(self, num_neurons_list):
+    def __init__(self, num_neurons_list, neuron='sigmoid', cost='entropy'):
         """Input must be a list of numbers
 
         :param list num_neurons_list: Create a neural network number of
@@ -66,6 +79,12 @@ class NN_hwr(object):
         self.weights = [np.random.randn(y, x)
                         for x, y in zip(num_neurons_list[:-1],
                         num_neurons_list[1:])]
+        self.cost_derivative = {'quadratic': self.cost_derivative_quad,
+                                'entropy': self.cost_derivative_ent}
+        self.cost_function = {'quadratic': self.cost_function_quad,
+                              'entropy': self.cost_function_ent}
+        self.neuron_flag = neuron
+        self.cost_flag = cost
 
     def forward_prop(self, x_train):
         """Computes the activations and weighted inputs of the neurons in
@@ -84,7 +103,8 @@ class NN_hwr(object):
 
         for i in range(self.num_layers - 1):
             z.append(np.dot(self.weights[i], activations[-1]) + self.biases[i])
-            activations.append(sigmoid(z[-1]))
+            # activations.append(sigmoid(z[-1]))
+            activations.append(activation_func[self.neuron_flag](z[-1]))
 
         return activations[1:], z
 
@@ -116,15 +136,21 @@ class NN_hwr(object):
         delta_b = np.array(self.biases[:])
         delta_w = np.array(self.weights[:])
 
-        delta_L = self.cost_derivative(activations[-1],
-                                       y_train) * sigmoid_derivative(z[-1])
+        # delta_L = (self.cost_derivative_quad(activations[-1], y_train) *
+        #            sigmoid_derivative(z[-1]))
+        # delta_L = (self.cost_derivative_ent(activations[-1], y_train) *
+        #            sigmoid_derivative(z[-1]))
+        delta_L = (self.cost_derivative[self.cost_flag]
+                   (activations[-1], y_train) *
+                   activation_func_derivative[self.neuron_flag](z[-1]))
 
         delta_b[-1] = delta_L
         delta_w[-1] = np.outer(delta_L, activations[-2])
         delta = delta_L
 
         for i in range(2, self.num_layers):
-            sd = sigmoid_derivative(z[-i])
+            # sd = sigmoid_derivative(z[-i])
+            sd = activation_func_derivative[self.neuron_flag](z[-1])
             delta = np.dot(self.weights[-i + 1].transpose(), delta) * sd
             delta_b[-i] = delta
             if i == self.num_layers - 1:
@@ -156,8 +182,8 @@ class NN_hwr(object):
             delta_b, delta_w = self.back_prop(training_example)
             delta_b_sum += delta_b
             delta_w_sum += delta_w
-        self.biases = self.biases - learning_rate * delta_b_sum
-        self.weights = self.weights - learning_rate * delta_w_sum
+        self.biases = self.biases - learning_rate / len(batch) * delta_b_sum
+        self.weights = self.weights - learning_rate / len(batch) * delta_w_sum
 
     def train_nn(self, X_train, y_train, n_epochs, batch_size, learning_rate):
         """Trains the neural network with the test data. n_epochs is the number
@@ -193,11 +219,12 @@ class NN_hwr(object):
                        for j in range(0, m, batch_size)]
             for batch in batches:
                 self.train_batch(batch, learning_rate)
-            print("epoch no: %d" % i, self.cost_function(X_train, y_train))
+            print("epoch no: %d" % i, self.cost_function[self.cost_flag]
+                  (X_train, y_train))
         sio.savemat('../data/weights_biases', {'w': self.weights,
                     'b': self.biases})
 
-    def cost_function(self, X_train, y_train):
+    def cost_function_quad(self, X_train, y_train):
         """Computes the quadratic cost function of the Neural Network
 
         :param ndarray X_train: Input data for training
@@ -212,7 +239,7 @@ class NN_hwr(object):
                                [0][-1] - y_train[i])**2)
         return J / len(y_train)
 
-    def cost_derivative(self, activation, y):
+    def cost_derivative_quad(self, activation, y):
         """Computes the derivative of the cost function given output activations and
         the labels
 
@@ -223,3 +250,14 @@ class NN_hwr(object):
 
         """
         return np.array(activation) - y
+
+    def cost_function_ent(self, X_train, y_train):
+        J = 0
+        for i in range(len(X_train)):
+            J -= np.sum(y_train[i] * np.log(self.forward_prop(X_train[i])
+                        [0][-1]) + (1 - y_train[i]) *
+                        np.log(1 - self.forward_prop(X_train[i])[0][-1]))
+        return J / len(X_train)
+
+    def cost_derivative_ent(self, activation, y):
+        return -(y / activation - (1 - y) / (1 - activation))
