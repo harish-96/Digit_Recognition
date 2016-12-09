@@ -37,7 +37,11 @@ class Preprocess(object):
         :return: List of arrays, each array is a line from image
 
         """
-        cropped_image = cropimg(binaryimg(self.image))
+        denoised_img = cv2.fastNlMeansDenoising(binaryimg(self.image),
+                                                None, 200, 7, 7)
+        cropped_image = cropimg(denoised_img)
+        plt.imshow(cropped_image)
+        plt.show()
         lines = []
         limg = cropped_image.copy()
         last_lin = last_line(limg)
@@ -45,7 +49,7 @@ class Preprocess(object):
             m, n = limg.shape
             p = 0
             for i in range(1, m):
-                if np.sum(limg[i, :]) == 0 and np.sum(limg[i - 1, :]) != 0:
+                if np.sum(limg[i, :]) == 0 and np.sum(limg[i - 1, :]) != 0 and np.sum(limg[i - 5, :]) != 0:
                     lines.append(limg[:i, :])
                     p = i
                     break
@@ -76,12 +80,10 @@ def binaryimg(image):
     blur_image = cv2.GaussianBlur(image, (7, 7), 0)
     binary_image = cv2.adaptiveThreshold(blur_image, 1,
                                          cv2.ADAPTIVE_THRESH_MEAN_C,
-                                         cv2.THRESH_BINARY_INV, 7, 5)
+                                         cv2.THRESH_BINARY_INV, 201, 15)
     m, n = binary_image.shape
     binary_image = np.asmatrix(binary_image)
-    blurred_bin = cv2.GaussianBlur(binary_image, (7, 7), 0)
-    plt.imshow(blurred_bin)
-    plt.show()
+    blurred_bin = cv2.GaussianBlur(binary_image, (7, 7), 3)
     return blurred_bin
 
 
@@ -91,23 +93,13 @@ def cropimg(image):
     :param array image:
 
     """
-    m, n = image.shape
-    c1 = n
-    c2 = 0
-    r1 = m
-    r2 = 0
-    for i in range(n):
-        for j in range(m):
-            if image[j, i] == 1:
-                if i < c1:
-                    c1 = i
-                if i > c2:
-                    c2 = i
-                if j < r1:
-                    r1 = j
-                if j > r2:
-                    r2 = j
-    return image[r1:r2 + 1, c1:c2 + 1]
+    col_sum = np.where(np.sum(image, axis=0) > 0)
+    row_sum = np.where(np.sum(image, axis=1) > 0)
+    y1, y2 = row_sum[0][0], row_sum[0][-1]
+    x1, x2 = col_sum[0][0], col_sum[0][-1]
+    cropped_image = image[y1:y2 + 1, x1:x2 + 1]
+    # import pdb;pdb.set_trace()
+    return cropped_image
 
 
 def last_line(img):
@@ -143,6 +135,12 @@ def segment_characters(line):
             if np.sum(cimg[:, i]) == 0 and np.sum(cimg[:, i - 1]) != 0:
                 char_temp = cimg[:, :i]
                 h, w = char_temp.shape
+                # import pdb;pdb.set_trace()
+                # if w < line.shape[1] / 40:
+                #     continue
+                if np.sum(char_temp) < 0.03 * h * w:
+                    p = i
+                    continue
                 if h > w:
                     pad_t = 0
                     pad_b = 0
@@ -156,8 +154,8 @@ def segment_characters(line):
 
                 char_temp = c_img.add_padding(char_temp, pad_t,
                                               pad_r, pad_b, pad_l)
-                chars.append(char_temp)
                 p = i
+                chars.append(char_temp)
                 break
         cimg = cimg[:, p:]
         cimg = cropimg(cimg)
