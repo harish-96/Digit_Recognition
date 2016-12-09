@@ -6,6 +6,7 @@ Functions to unpack the data from the MNIST database, uncompress the data and di
 
 
 from Neural_Network import neuralnet as nln
+# import neuralnet as nln
 import numpy as np
 import scipy.io as sio
 import os
@@ -96,16 +97,16 @@ def display_data(imgs, nrows=1, ncols=1, nx_pixels=28, ny_pixels=28):
 if __name__ == '__main__':
     X_train, y_train = load_data("../data/traindata.mat.tar.gz")
     X_test, y_test = load_data("../data/testdata.mat.tar.gz")
-    nn = nln.NN_hwr([len(X_train[0]), 15, 10])
+    nn = nln.NN_hwr([len(X_train[0]), 30, 10], cost='entropy')
     epochs = 30
     if len(sys.argv) > 1:
         epochs = int(sys.argv[1])
-    nn.train_nn(X_train, y_train, epochs, 20, 0.06)
+    nn.train_nn(X_train, y_train, epochs, 20, 0.5, 5.0)
     accuracy = 0
     for i in range(len(X_test[:])):
             out = nn.forward_prop(X_test[i])[0][-1]
             if np.argmax(out) == np.where(y_test[i])[0][0]:
                 accuracy += 1
 
-    print("Accuracy of prediction: ", accuracy * 100 / len(X_test), "%")
+    print("Accuracy of prediction: ", accuracy * 100.0 / len(X_test), "%")
     sio.savemat("../data/weights_biases", {'w': nn.weights, 'b': nn.biases})

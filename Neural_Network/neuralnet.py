@@ -150,7 +150,7 @@ class NN_hwr(object):
 
         for i in range(2, self.num_layers):
             # sd = sigmoid_derivative(z[-i])
-            sd = activation_func_derivative[self.neuron_flag](z[-1])
+            sd = activation_func_derivative[self.neuron_flag](z[-i])
             delta = np.dot(self.weights[-i + 1].transpose(), delta) * sd
             delta_b[-i] = delta
             if i == self.num_layers - 1:
@@ -158,9 +158,10 @@ class NN_hwr(object):
             else:
                 ac = activations[-i - 1]
             delta_w[-i] = np.outer(delta, ac)
+        delta_w = delta_w
         return (delta_b, delta_w)
 
-    def train_batch(self, batch, learning_rate):
+    def train_batch(self, batch, learning_rate, train_data_size):
         """ Trains the network with one subset of the training data.
         Input is the subset of training data for witch the network is
         to be trained. Learning rate governs the rate at which the
@@ -183,9 +184,11 @@ class NN_hwr(object):
             delta_b_sum += delta_b
             delta_w_sum += delta_w
         self.biases = self.biases - learning_rate / len(batch) * delta_b_sum
-        self.weights = self.weights - learning_rate / len(batch) * delta_w_sum
+        self.weights = (self.weights - learning_rate / len(batch) *
+                        (delta_w_sum + self.lmbda * np.asarray(self.weights) / train_data_size))
 
-    def train_nn(self, X_train, y_train, n_epochs, batch_size, learning_rate):
+    def train_nn(self, X_train, y_train, n_epochs, batch_size,
+                 learning_rate, lmbda):
         """Trains the neural network with the test data. n_epochs is the number
         sweeps over the whole data. batch_size is the number of training
         example per batch in the stochastic gradient descent. X_train and
@@ -209,7 +212,7 @@ class NN_hwr(object):
 
         :return: None
         """
-
+        self.lmbda = lmbda
         m = len(y_train)
         train_data = list(zip(X_train, y_train))
 
@@ -218,7 +221,7 @@ class NN_hwr(object):
             batches = [train_data[j:j + batch_size]
                        for j in range(0, m, batch_size)]
             for batch in batches:
-                self.train_batch(batch, learning_rate)
+                self.train_batch(batch, learning_rate, m)
             print("epoch no: %d" % i, self.cost_function[self.cost_flag]
                   (X_train, y_train))
         sio.savemat('../data/weights_biases', {'w': self.weights,
@@ -237,7 +240,11 @@ class NN_hwr(object):
         for i in range(len(y_train)):
             J += 0.5 * np.sum((self.forward_prop(X_train[i])
                                [0][-1] - y_train[i])**2)
-        return J / len(y_train)
+        # import pdb;pdb.set_trace()
+        square_w = np.square(self.weights)
+        J = J / len(X_train) + (self.lmbda / 2 / len(X_train) *
+                                (np.sum(square_w[0]) + np.sum(square_w[1])))
+        return J
 
     def cost_derivative_quad(self, activation, y):
         """Computes the derivative of the cost function given output activations and
@@ -257,7 +264,9 @@ class NN_hwr(object):
             J -= np.sum(y_train[i] * np.log(self.forward_prop(X_train[i])
                         [0][-1]) + (1 - y_train[i]) *
                         np.log(1 - self.forward_prop(X_train[i])[0][-1]))
-        return J / len(X_train)
+        square_w = np.square(self.weights)
+        return J / len(X_train) + (self.lmbda / 2 / len(X_train) *
+                                   (np.sum(square_w[0]) + np.sum(square_w[1])))
 
     def cost_derivative_ent(self, activation, y):
         return -(y / activation - (1 - y) / (1 - activation))

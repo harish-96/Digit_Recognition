@@ -40,7 +40,6 @@ class Preprocess(object):
         cropped_image = cropimg(binaryimg(self.image))
         lines = []
         limg = cropped_image.copy()
-        print("yabadabadoo")
         last_lin = last_line(limg)
         while not np.sum(limg) == np.sum(last_lin):
             m, n = limg.shape
@@ -76,20 +75,13 @@ def binaryimg(image):
     """
     blur_image = cv2.GaussianBlur(image, (7, 7), 0)
     binary_image = cv2.adaptiveThreshold(blur_image, 1,
-                                         cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 7, 5) #+ cv2.THRESH_OTSU)
+                                         cv2.ADAPTIVE_THRESH_MEAN_C,
+                                         cv2.THRESH_BINARY_INV, 7, 5)
     m, n = binary_image.shape
     binary_image = np.asmatrix(binary_image)
     blurred_bin = cv2.GaussianBlur(binary_image, (7, 7), 0)
     plt.imshow(blurred_bin)
     plt.show()
-    # for i in range(n):
-    #     for j in range(m):
-    #         if binary_image[j, i] == 0:
-    #             binary_image[j, i] = 1
-    # for i in range(n):
-    #     for j in range(m):
-    #         if binary_image[j, i] == 255:
-    #             binary_image[j, i] = 0
     return blurred_bin
 
 
@@ -162,7 +154,8 @@ def segment_characters(line):
                     pad_t = int((w - h) / 2)
                     pad_b = int((w - h) / 2)
 
-                char_temp = c_img.add_padding(char_temp, pad_t, pad_r, pad_b, pad_l)
+                char_temp = c_img.add_padding(char_temp, pad_t,
+                                              pad_r, pad_b, pad_l)
                 chars.append(char_temp)
                 p = i
                 break

@@ -2,12 +2,12 @@ from Neural_Network.neuralnet import NN_hwr
 from Neural_Network.train_network import load_data
 import Image_Processing.imgpreprocess as igp
 from Image_Processing.center_image import *
-import scipy.io as sio
 import numpy as np
 import matplotlib.pyplot as plt
-from PIL import Image
 import os
 import sys
+import scipy.io as sio
+
 
 pathrecog = sys.argv[0]
 pathrecog = os.path.abspath(pathrecog)
@@ -27,28 +27,18 @@ if len(sys.argv) == 3:
     outfile_path = sys.argv[2]
     if os.path.exists(outfile_path):
         os.remove(outfile_path)
+
 k = igp.Preprocess(path)
 lines = k.segment_lines()
 chars = []
-n = 0
+n_line = 0
 
 for line in lines:
-    n += 1
-    numbers = "Line no: " + str(n) + " : "
+    n_line += 1
+    numbers = "Line no: " + str(n_line) + " : "
     for char in igp.segment_characters(line):
         chars.append(char)
-        plt.imshow(char)
-        plt.show()
-        char028 = np.zeros((28, 28))
-        image = Image.fromarray(char)
-        # char0 = np.array(image.resize((20, 20), Image.ANTIALIAS))
-        char0 = np.array(image.resize((20, 20)))
-        # plt.imshow(char0)
-        # plt.show()
-        for i in range(20):
-            for j in range(20):
-                char028[4 + i][4 + j] = char0[i][j]
-        char028 = center_image(char028)
+        char028 = center_image(char)
         char028re = np.reshape(char028, (784, 1))
         ex = nn.forward_prop(char028re)[0][-1]
         if output:
