@@ -39,11 +39,11 @@ def sigmoid_derivative(z):
 
 
 def relu(z):
-    np.maximum(np.zeros_like(z), z)
+    return np.maximum(np.zeros_like(z), z)
 
 
 def relu_derivative(z):
-    np.greater(z, np.zeros_like(z))
+    return np.greater(z, np.zeros_like(z)) * 1
 
 
 activation_func = {'sigmoid': sigmoid, 'relu': relu}
@@ -76,7 +76,7 @@ class NN_hwr(object):
         self.num_layers = len(num_neurons_list)
         self.num_neurons_list = num_neurons_list
         self.biases = [np.random.randn(y, 1) for y in num_neurons_list[1:]]
-        self.weights = [np.random.randn(y, x)
+        self.weights = [np.random.randn(y, x) / np.sqrt(x)
                         for x, y in zip(num_neurons_list[:-1],
                         num_neurons_list[1:])]
         self.cost_derivative = {'quadratic': self.cost_derivative_quad,
@@ -159,6 +159,7 @@ class NN_hwr(object):
                 ac = activations[-i - 1]
             delta_w[-i] = np.outer(delta, ac)
         delta_w = delta_w
+        # import pdb;pdb.set_trace()
         return (delta_b, delta_w)
 
     def train_batch(self, batch, learning_rate, train_data_size):
@@ -240,7 +241,6 @@ class NN_hwr(object):
         for i in range(len(y_train)):
             J += 0.5 * np.sum((self.forward_prop(X_train[i])
                                [0][-1] - y_train[i])**2)
-        # import pdb;pdb.set_trace()
         square_w = np.square(self.weights)
         J = J / len(X_train) + (self.lmbda / 2 / len(X_train) *
                                 (np.sum(square_w[0]) + np.sum(square_w[1])))
@@ -269,4 +269,8 @@ class NN_hwr(object):
                                    (np.sum(square_w[0]) + np.sum(square_w[1])))
 
     def cost_derivative_ent(self, activation, y):
-        return -(y / activation - (1 - y) / (1 - activation))
+        if np.any(activation) or np.any(1 - activation):
+            return -(y / (activation +
+                          10**-8) - (1 - y) / (1 - activation + 10**-8))
+        else:
+            return -(y / activation - (1 - y) / (1 - activation))
