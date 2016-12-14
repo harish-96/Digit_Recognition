@@ -22,14 +22,18 @@ nn.biases = dat['b'][0]
 
 path = sys.argv[1]
 output = 0
-if len(sys.argv) == 3:
-    output = 1
-    outfile_path = sys.argv[2]
-    if os.path.exists(outfile_path):
-        os.remove(outfile_path)
+bin_block_size = 0.5
+if len(sys.argv) > 2:
+    bin_block_size = float(sys.argv[2])
+    if len(sys.argv) > 3:
+        output = 1
+        outfile_path = sys.argv[3]
+        if os.path.exists(outfile_path):
+            os.remove(outfile_path)
+
 
 k = igp.Preprocess(path)
-lines = k.segment_lines()
+lines = k.segment_lines(bin_block_size)
 chars = []
 n_line = 0
 

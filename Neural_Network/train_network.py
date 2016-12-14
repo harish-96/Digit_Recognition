@@ -97,7 +97,7 @@ def display_data(imgs, nrows=1, ncols=1, nx_pixels=28, ny_pixels=28):
 if __name__ == '__main__':
     X_train, y_train = load_data("../data/traindata.mat.tar.gz")
     X_test, y_test = load_data("../data/testdata.mat.tar.gz")
-    nn = nln.NN_hwr([len(X_train[0]), 2, 10], cost='entropy', neuron='relu')
+    nn = nln.NN_hwr([len(X_train[0]), 100, 10], cost='entropy', neuron='sigmoid')
     epochs = 30
     if len(sys.argv) > 1:
         epochs = int(sys.argv[1])
@@ -109,5 +109,6 @@ if __name__ == '__main__':
             if np.argmax(out) == np.where(y_test[i])[0][0]:
                 accuracy += 1
 
-    print("Accuracy of prediction: ", accuracy * 100.0 / len(X_test), "%")
+    print("Accuracy of prediction: " +
+          str(accuracy * 100.0 / len(X_test)) + "%")
     sio.savemat("../data/weights_biases", {'w': nn.weights, 'b': nn.biases})

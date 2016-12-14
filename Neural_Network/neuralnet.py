@@ -79,8 +79,8 @@ class NN_hwr(object):
         self.weights = [np.random.randn(y, x) / np.sqrt(x)
                         for x, y in zip(num_neurons_list[:-1],
                         num_neurons_list[1:])]
-        self.cost_derivative = {'quadratic': self.cost_derivative_quad,
-                                'entropy': self.cost_derivative_ent}
+        self.delta_func = {'quadratic': self.delta_quad,
+                           'entropy': self.delta_ent}
         self.cost_function = {'quadratic': self.cost_function_quad,
                               'entropy': self.cost_function_ent}
         self.neuron_flag = neuron
@@ -136,18 +136,12 @@ class NN_hwr(object):
         delta_b = np.array(self.biases[:])
         delta_w = np.array(self.weights[:])
 
-        # delta_L = (self.cost_derivative_quad(activations[-1], y_train) *
-        #            sigmoid_derivative(z[-1]))
-        # delta_L = (self.cost_derivative_ent(activations[-1], y_train) *
-        #            sigmoid_derivative(z[-1]))
-        delta_L = (self.cost_derivative[self.cost_flag]
-                   (activations[-1], y_train) *
-                   activation_func_derivative[self.neuron_flag](z[-1]))
+        delta_L = (self.delta_func[self.cost_flag]
+                   (activations[-1], y_train, z[-1]))
 
         delta_b[-1] = delta_L
         delta_w[-1] = np.outer(delta_L, activations[-2])
         delta = delta_L
-
         for i in range(2, self.num_layers):
             # sd = sigmoid_derivative(z[-i])
             sd = activation_func_derivative[self.neuron_flag](z[-i])
@@ -158,8 +152,9 @@ class NN_hwr(object):
             else:
                 ac = activations[-i - 1]
             delta_w[-i] = np.outer(delta, ac)
+            if np.any(np.isnan(delta_w[-i])):
+                import pdb;pdb.set_trace()
         delta_w = delta_w
-        # import pdb;pdb.set_trace()
         return (delta_b, delta_w)
 
     def train_batch(self, batch, learning_rate, train_data_size):
@@ -246,7 +241,7 @@ class NN_hwr(object):
                                 (np.sum(square_w[0]) + np.sum(square_w[1])))
         return J
 
-    def cost_derivative_quad(self, activation, y):
+    def delta_quad(self, activation, y, z):
         """Computes the derivative of the cost function given output activations and
         the labels
 
@@ -256,21 +251,20 @@ class NN_hwr(object):
         :return: Float value of the cost function of the Neural Network
 
         """
-        return np.array(activation) - y
+        return ((np.array(activation) - y) *
+                activation_func_derivative[self.neuron_flag](z[-1]))
 
     def cost_function_ent(self, X_train, y_train):
         J = 0
         for i in range(len(X_train)):
-            J -= np.sum(y_train[i] * np.log(self.forward_prop(X_train[i])
-                        [0][-1]) + (1 - y_train[i]) *
-                        np.log(1 - self.forward_prop(X_train[i])[0][-1]))
+            a = self.forward_prop(X_train[i])[0][-1]
+            y = y_train[i]
+            J += np.sum(np.nan_to_num(-y*np.log(a)-(1-y)*np.log(1-a)))
+            if np.isnan(J):
+                import pdb;pdb.set_trace()
         square_w = np.square(self.weights)
         return J / len(X_train) + (self.lmbda / 2 / len(X_train) *
                                    (np.sum(square_w[0]) + np.sum(square_w[1])))
 
-    def cost_derivative_ent(self, activation, y):
-        if np.any(activation) or np.any(1 - activation):
-            return -(y / (activation +
-                          10**-8) - (1 - y) / (1 - activation + 10**-8))
-        else:
-            return -(y / activation - (1 - y) / (1 - activation))
+    def delta_ent(self, activation, y, z):
+        return np.array(activation) - y

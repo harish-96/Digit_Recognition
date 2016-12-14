@@ -30,14 +30,16 @@ class Preprocess(object):
         else:
             raise TypeError("Expected imagepath as a string")
 
-    def segment_lines(self):
+    def segment_lines(self, bin_block_size=0.5):
         """The image containing text is segmented into lines and returns
         a list of the lines
 
         :return: List of arrays, each array is a line from image
 
         """
-        denoised_img = cv2.fastNlMeansDenoising(binaryimg(self.image),
+        bin_block_size = int(bin_block_size * 399)
+        denoised_img = cv2.fastNlMeansDenoising(binaryimg
+                                                (self.image, bin_block_size),
                                                 None, 200, 7, 7)
         cropped_image = cropimg(denoised_img)
         plt.imshow(cropped_image)
@@ -49,11 +51,11 @@ class Preprocess(object):
             m, n = limg.shape
             p = 0
             for i in range(1, m):
-                if np.sum(limg[i, :]) == 0 and np.sum(limg[i - 1, :]) != 0 and np.sum(limg[i - 5, :]) != 0:
+                if np.sum(limg[i, :]) == 0 and\
+                   np.sum(limg[i - 1, :]) != 0 and np.sum(limg[i - 5, :]) != 0:
                     lines.append(limg[:i, :])
                     p = i
                     break
-            # lines.append(last_line(limg))
             limg = limg[p:, :]
             limg = cropimg(limg)
         lines.append(last_lin)
@@ -70,7 +72,7 @@ class Preprocess(object):
         return lines
 
 
-def binaryimg(image):
+def binaryimg(image, bin_block_size):
     """Converts grayscale image to binary image , it gives 1 for black and zero
     for white.
 
@@ -80,7 +82,8 @@ def binaryimg(image):
     blur_image = cv2.GaussianBlur(image, (7, 7), 0)
     binary_image = cv2.adaptiveThreshold(blur_image, 1,
                                          cv2.ADAPTIVE_THRESH_MEAN_C,
-                                         cv2.THRESH_BINARY_INV, 201, 15)
+                                         cv2.THRESH_BINARY_INV,
+                                         bin_block_size, 15)
     m, n = binary_image.shape
     binary_image = np.asmatrix(binary_image)
     blurred_bin = cv2.GaussianBlur(binary_image, (7, 7), 3)
